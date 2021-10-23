@@ -75,18 +75,24 @@ bgNum(1, 20)
 function setBg() {
 	const body = document.querySelector('body')
 	const img = new Image();
-	loading = false
 	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg`
 	img.onload = () => {
-
 		body.style.backgroundImage =
 			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg')`
-		loading = true
+		setTimeout(() => { loading = true }, 1100);
+	}
+}
+function setBgFirstLoad() {
+	const body = document.querySelector('body')
+	const img = new Image();
+	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg`
+	img.onload = () => {
+		body.style.backgroundImage =
+			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg')`
 	}
 }
 
-
-setBg()
+setBgFirstLoad()
 
 
 document.querySelector('.slide-prev').addEventListener('click', getSlidePrev)
@@ -94,6 +100,7 @@ document.querySelector('.slide-next').addEventListener('click', getSlideNext)
 
 function getSlideNext() {
 	if (loading) {
+		loading = false
 		if (randomNum == '20') {
 			randomNum = 1
 		} else {
@@ -106,6 +113,7 @@ function getSlideNext() {
 
 function getSlidePrev() {
 	if (loading) {
+		loading = false
 		if (randomNum == '01') {
 			randomNum = 20
 		} else {
@@ -114,6 +122,64 @@ function getSlidePrev() {
 		randomNum = String(randomNum).padStart(2, '0')
 		setBg()
 	}
+}
+
+// Weather
+const city = document.querySelector('.city')
+if (localStorage.getItem('currentNameCity') && localStorage.getItem('currentNameCity') !== 'undefined') {
+	city.value = localStorage.getItem('currentNameCity')
+} else {
+	city.value = 'Minsk'
+}
+let currentNameCity = city.value
+async function getWeather() {
+	const weatherIcon = document.querySelector('.weather-icon');
+	const temperature = document.querySelector('.temperature');
+	const weatherDescription = document.querySelector('.weather-description');
+	const weatherError = document.querySelector('.weather-error')
+	const humidity = document.querySelector('.humidity');
+	const wind = document.querySelector('.wind')
+
+	const url =
+		`https://api.openweathermap.org/data/2.5/weather?q=${currentNameCity}&lang=en&appid=2c9de9201bfa2b88df09186fc2130c69&units=metric`
+	const res = await fetch(url)
+	if (res.status !== 404 && res.status !== 400) {
+		const data = await res.json()
+		weatherError.textContent = ''
+		city.value = data.name
+		weatherSave(city.value)
+		weatherIcon.className = 'weather-icon owf';
+		weatherIcon.classList.add(`owf-${data.weather[0].id}`)
+		temperature.textContent = `${Math.floor(data.main.temp)}°C`
+		weatherDescription.textContent = data.weather[0].description
+		wind.textContent = `Wind speed: ${Math.floor(data.wind.speed)} m/s`
+		humidity.textContent = `Humidity: ${Math.floor(data.main.humidity)}%`
+	} else if (res.status === 400) {
+		weatherError.textContent = `Error! Nothing to geocode for ''!`
+		weatherIcon.className = 'weather-icon owf';
+		temperature.textContent = ''
+		weatherDescription.textContent = ''
+		wind.textContent = ''
+		humidity.textContent = ''
+	} else {
+		weatherError.textContent = `Error! city not found for '${currentNameCity}'!`
+		weatherIcon.className = 'weather-icon owf';
+		temperature.textContent = ''
+		weatherDescription.textContent = ''
+		wind.textContent = ''
+		humidity.textContent = ''
+	}
+}
+
+getWeather()
+
+city.addEventListener('change', function () {
+	currentNameCity = city.value
+	getWeather()
+})
+
+function weatherSave(value) {
+	localStorage.setItem('currentNameCity', value)
 }
 
 
