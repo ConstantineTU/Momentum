@@ -1,4 +1,6 @@
 
+import playList from './playList.js'
+
 // ? Часы и время 
 
 function showTime() {
@@ -8,7 +10,7 @@ function showTime() {
 	time.textContent = currentTime
 	showDate()
 	showGreeting()
-	setTimeout(showTime, 1000);
+	setTimeout(showTime, 1000)
 }
 showTime();
 
@@ -17,7 +19,7 @@ function showDate() {
 	const dateLocal = new Date()
 	const options = { month: 'long', day: 'numeric', weekday: 'long' }
 	// TODO Добавить смену языка
-	const currentDate = dateLocal.toLocaleDateString('ru-RU', options)
+	const currentDate = dateLocal.toLocaleDateString('en-EN', options)
 	date.textContent = currentDate.replace(/(^|\s)\S/g, function (a) { return a.toUpperCase() })
 }
 // End Time and Date
@@ -61,8 +63,8 @@ let randomNum = String(randomNumber(1, 20)).padStart(2, '0')
 let loading = true
 
 function randomNumber(mi, ma) {
-	let min = Math.ceil(mi);
-	let max = Math.floor(ma);
+	let min = Math.ceil(mi)
+	let max = Math.floor(ma)
 	const result = Math.floor(Math.random() * (max - min + 1)) + min
 	return result
 }
@@ -74,17 +76,17 @@ function randomNumber(mi, ma) {
 
 function setBg() {
 	const body = document.querySelector('body')
-	const img = new Image();
+	const img = new Image()
 	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg`
 	img.onload = () => {
 		body.style.backgroundImage =
 			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg')`
-		setTimeout(() => { loading = true }, 1100);
+		setTimeout(() => { loading = true }, 1100)
 	}
 }
 function setBgFirstLoad() {
 	const body = document.querySelector('body')
-	const img = new Image();
+	const img = new Image()
 	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg`
 	img.onload = () => {
 		body.style.backgroundImage =
@@ -133,11 +135,11 @@ if (localStorage.getItem('currentNameCity') && localStorage.getItem('currentName
 }
 let currentNameCity = city.value
 async function getWeather() {
-	const weatherIcon = document.querySelector('.weather-icon');
-	const temperature = document.querySelector('.temperature');
-	const weatherDescription = document.querySelector('.weather-description');
+	const weatherIcon = document.querySelector('.weather-icon')
+	const temperature = document.querySelector('.temperature')
+	const weatherDescription = document.querySelector('.weather-description')
 	const weatherError = document.querySelector('.weather-error')
-	const humidity = document.querySelector('.humidity');
+	const humidity = document.querySelector('.humidity')
 	const wind = document.querySelector('.wind')
 
 	const url =
@@ -148,7 +150,7 @@ async function getWeather() {
 		weatherError.textContent = ''
 		city.value = data.name
 		weatherSave(city.value)
-		weatherIcon.className = 'weather-icon owf';
+		weatherIcon.className = 'weather-icon owf'
 		weatherIcon.classList.add(`owf-${data.weather[0].id}`)
 		temperature.textContent = `${Math.floor(data.main.temp)}°C`
 		weatherDescription.textContent = data.weather[0].description
@@ -156,14 +158,14 @@ async function getWeather() {
 		humidity.textContent = `Humidity: ${Math.floor(data.main.humidity)}%`
 	} else if (res.status === 400) {
 		weatherError.textContent = `Error! Nothing to geocode for ''!`
-		weatherIcon.className = 'weather-icon owf';
+		weatherIcon.className = 'weather-icon owf'
 		temperature.textContent = ''
 		weatherDescription.textContent = ''
 		wind.textContent = ''
 		humidity.textContent = ''
 	} else {
 		weatherError.textContent = `Error! city not found for '${currentNameCity}'!`
-		weatherIcon.className = 'weather-icon owf';
+		weatherIcon.className = 'weather-icon owf'
 		temperature.textContent = ''
 		weatherDescription.textContent = ''
 		wind.textContent = ''
@@ -187,9 +189,9 @@ function weatherSave(value) {
 async function getQuotes() {
 	const quote = document.querySelector('.quote')
 	const author = document.querySelector('.author')
-	const quotes = 'assets/json/data.json';
-	const res = await fetch(quotes);
-	const data = await res.json();
+	const quotes = 'assets/json/data.json'
+	const res = await fetch(quotes)
+	const data = await res.json()
 	const randomQuote = data.quotes[randomNumber(0, data.quotes.length - 1)]
 	quote.textContent = `"${randomQuote.quote}"`
 	author.textContent = randomQuote.author
@@ -197,6 +199,72 @@ async function getQuotes() {
 getQuotes();
 
 document.querySelector('.change-quote').addEventListener('click', getQuotes)
+
+// audio player
+
+let isPlay = false
+const audio = new Audio()
+
+let playNum = 0
+function playAudio() {
+	const playItems = document.querySelectorAll('.play-item')
+	const play = document.querySelector('.play')
+	audio.src = playList[playNum].src
+
+	playItems.forEach(item => (item.classList.remove('item-active')))
+	playItems[playNum].classList.add('item-active')
+	if (!isPlay) {
+		isPlay = true
+		audio.currentTime = 0
+		play.classList.add('pause')
+		audio.play()
+	} else {
+		isPlay = false
+		play.classList.remove('pause')
+		if (!audio.paused) {
+			audio.pause()
+		}
+
+	}
+}
+function playNext() {
+	if (playNum === 3) {
+		playNum = 0
+		audio.pause()
+		isPlay = false
+	} else {
+		playNum++
+		audio.pause()
+		isPlay = false
+	}
+	playAudio()
+}
+function playPrev() {
+	if (playNum === 0) {
+		playNum = 3
+		isPlay = false
+		audio.pause()
+	} else {
+		playNum--
+		isPlay = false
+		audio.pause()
+	}
+	playAudio()
+}
+function cratePlayList() {
+	for (let i = 0; i < playList.length; i++) {
+		const playItemLi = document.createElement('li')
+		const playListUl = document.querySelector('.play-list')
+		playItemLi.classList.add('play-item')
+		playItemLi.textContent = playList[i].title
+		playListUl.append(playItemLi)
+	}
+}
+cratePlayList()
+audio.addEventListener('ended', playNext)
+document.querySelector('.play-next').addEventListener('click', playNext)
+document.querySelector('.play-prev').addEventListener('click', playPrev)
+document.querySelector('.play').addEventListener('click', playAudio)
 
 
 
