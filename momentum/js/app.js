@@ -204,31 +204,51 @@ document.querySelector('.change-quote').addEventListener('click', getQuotes)
 
 let isPlay = false
 const audio = new Audio()
+const audioName = document.querySelector('.track-name')
 
-let playNum = 0
+let playNum
+if (localStorage.getItem('playNum')) {
+	playNum = localStorage.getItem('playNum')
+} else {
+	playNum = 0
+}
+audioName.textContent = playList[playNum].title
+audio.src = playList[playNum].src
+
 function playAudio() {
 	const playItems = document.querySelectorAll('.play-item')
 	const play = document.querySelector('.play')
 	audio.src = playList[playNum].src
-
-	playItems.forEach(item => (item.classList.remove('item-active')))
+	audioName.textContent = playList[playNum].title
+	isChangeSoundProgress = false
+	playItems.forEach(item => (item.classList = 'play-item'))
 	playItems[playNum].classList.add('item-active')
 	if (!isPlay) {
+		playItems[playNum].classList.add('playing')
+
 		isPlay = true
-		audio.currentTime = 0
+		if (localStorage.getItem('audioCurrentTime') && !isNaN(localStorage.getItem('soundProgress-value'))) {
+
+			audio.currentTime = localStorage.getItem('audioCurrentTime')
+		} else {
+			audio.currentTime = 0
+		}
 		play.classList.add('pause')
 		audio.play()
+
 	} else {
 		isPlay = false
+		playItems[playNum].classList.remove('playing')
 		play.classList.remove('pause')
 		if (!audio.paused) {
 			audio.pause()
 		}
 
 	}
+
 }
 function playNext() {
-	if (playNum === 3) {
+	if (playNum >= playList.length - 1) {
 		playNum = 0
 		audio.pause()
 		isPlay = false
@@ -237,11 +257,13 @@ function playNext() {
 		audio.pause()
 		isPlay = false
 	}
+	localStorage.setItem('soundProgress-value', 'NaN')
+	localStorage.setItem('playNum', playNum)
 	playAudio()
 }
 function playPrev() {
-	if (playNum === 0) {
-		playNum = 3
+	if (playNum <= 0) {
+		playNum = playList.length - 1
 		isPlay = false
 		audio.pause()
 	} else {
@@ -249,9 +271,12 @@ function playPrev() {
 		isPlay = false
 		audio.pause()
 	}
+	localStorage.setItem('soundProgress-value', 'NaN')
+	localStorage.setItem('playNum', playNum)
 	playAudio()
 }
-function cratePlayList() {
+let playItems
+function createPlayList() {
 	for (let i = 0; i < playList.length; i++) {
 		const playItemLi = document.createElement('li')
 		const playListUl = document.querySelector('.play-list')
@@ -259,12 +284,150 @@ function cratePlayList() {
 		playItemLi.textContent = playList[i].title
 		playListUl.append(playItemLi)
 	}
+
+	playItems = document.querySelectorAll('.play-item')
+	playItems[playNum].classList.add('item-active')
+	for (let i = 0; i < playItems.length; i++) {
+		playItems[i].addEventListener('click', function () {
+			playNum = i
+			localStorage.setItem('soundProgress-value', 'NaN')
+			localStorage.setItem('playNum', playNum)
+			if (!playItems[i].classList.contains('item-active')) {
+				isPlay = false
+				audio.pause()
+			}
+			playAudio()
+		})
+	}
 }
-cratePlayList()
+createPlayList()
 audio.addEventListener('ended', playNext)
 document.querySelector('.play-next').addEventListener('click', playNext)
 document.querySelector('.play-prev').addEventListener('click', playPrev)
 document.querySelector('.play').addEventListener('click', playAudio)
+
+
+
+// advanced player
+
+const volumeProgress = document.querySelector('#soundVolume');
+const volumeIcon = document.querySelector('.play-volume')
+const volumeContainer = document.querySelector('.volume-player')
+
+volumeProgress.addEventListener('change', function () {
+	const value = this.value * 100;
+	this.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${value}%, #c4c4c4 ${value}%, #c4c4c4 100%)`
+	if (value) {
+		localStorage.setItem('volume-progress', this.style.background)
+		localStorage.setItem('volume-value', value)
+	}
+})
+
+volumeProgress.addEventListener('input', function () {
+
+	const value = this.value * 100;
+	this.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${value}%, #c4c4c4 ${value}%, #c4c4c4 100%)`
+	audio.volume = value / 100
+	if (!audio.volume && !volumeContainer.classList.contains('toggle')) {
+		volumeContainer.classList.add('toggle')
+		audio.muted = true
+	} else if (audio.volume && volumeContainer.classList.contains('toggle')) {
+		volumeContainer.classList.remove('toggle')
+		audio.muted = false
+	}
+})
+
+function muteVolume() {
+	if (!audio.muted) {
+		volumeContainer.classList.add('toggle')
+		audio.muted = true
+	} else {
+		volumeContainer.classList.remove('toggle')
+		audio.muted = false
+		if (audio.volume === 0) {
+			if (localStorage.getItem('volume-value')) {
+				volumeProgress.style.background = localStorage.getItem('volume-progress')
+				audio.volume = localStorage.getItem('volume-value') / 100
+				volumeProgress.value = localStorage.getItem('volume-value') / 100
+			} else {
+				volumeProgress.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${30}%, #c4c4c4 ${30}%, #c4c4c4 100%)`
+				volumeProgress.value = 30 / 100
+				audio.volume = 30 / 100
+			}
+		}
+
+	}
+
+}
+volumeIcon.addEventListener('click', muteVolume)
+
+function loadVolumeSettings() {
+	if (localStorage.getItem('volume-value')) {
+		volumeProgress.style.background = localStorage.getItem('volume-progress')
+		audio.volume = localStorage.getItem('volume-value') / 100
+		volumeProgress.value = localStorage.getItem('volume-value') / 100
+	} else {
+		volumeProgress.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${25}%, #c4c4c4 ${25}%, #c4c4c4 100%)`
+		volumeProgress.value = 25 / 100
+		audio.volume = 25 / 100
+
+	}
+}
+loadVolumeSettings()
+
+// audio Progress
+const soundProgress = document.querySelector('#soundProgress');
+let isChangeSoundProgress = false
+
+soundProgress.addEventListener('change', function () {
+	isChangeSoundProgress = false
+	const value = this.value * 100;
+	this.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${value}%, #c4c4c4 ${value}%, #c4c4c4 100%)`
+	localStorage.setItem('soundProgress', this.style.background)
+	localStorage.setItem('soundProgress-value', value)
+	audio.currentTime = ((audio.duration / 100) * value)
+	localStorage.setItem('audioCurrentTime', audio.currentTime)
+	timer.textContent = `${Math.floor(audio.currentTime / 60)}:${String(Math.floor(audio.currentTime % 60)).padStart(2, '0')}`
+})
+soundProgress.addEventListener('input', function () {
+	isChangeSoundProgress = true
+	const value = this.value * 100;
+	this.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${value}%, #c4c4c4 ${value}%, #c4c4c4 100%)`
+})
+
+function loadSoundSettings() {
+	if (localStorage.getItem('soundProgress-value')) {
+		soundProgress.style.background = localStorage.getItem('soundProgress',)
+		soundProgress.value = localStorage.getItem('soundProgress-value') / 100
+		audio.currentTime = localStorage.getItem('audioCurrentTime')
+	} else {
+		soundProgress.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${0}%, #c4c4c4 ${0}%, #c4c4c4 100%)`
+		soundProgress.value = 0 / 100
+		audio.currentTime = 0
+	}
+}
+loadSoundSettings()
+timer.textContent = '00:00'
+duration.textContent = '01:00'
+function changeProgressAudio() {
+	const timer = document.getElementById('timer')
+	const duration = document.getElementById('duration')
+	if (!isChangeSoundProgress) {
+		if (!isNaN(audio.duration)) {
+			duration.textContent = `${Math.floor(audio.duration / 60)}:${String(Math.floor(audio.duration % 60)).padStart(2, '0')}`
+			const value = 100 / audio.duration * audio.currentTime;
+			soundProgress.value = 100 / audio.duration * audio.currentTime / 100
+			soundProgress.style.background = `linear-gradient(to right, #c5b358 0%, #c5b358 ${value}%, #c4c4c4 ${value}%, #c4c4c4 100%)`
+			localStorage.setItem('soundProgress', soundProgress.style.background)
+			localStorage.setItem('soundProgress-value', value)
+			localStorage.setItem('audioCurrentTime', audio.currentTime)
+			timer.textContent = `${Math.floor(audio.currentTime / 60)}:${String(Math.floor(audio.currentTime % 60)).padStart(2, '0')}`
+
+		}
+	}
+}
+audio.addEventListener('timeupdate', changeProgressAudio)
+
 
 
 

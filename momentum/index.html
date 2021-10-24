@@ -14,11 +14,30 @@
 	<div class="wrapper">
 		<header class="header">
 			<div class="player">
-				<div class="player-controls">
-					<button class="play-prev player-icon"></button>
-					<button class="play player-icon"></button>
-					<button class="play-next player-icon"></button>
+				<div class="player-wrap">
+					<div class="player-controls">
+						<button class="play-prev player-icon"></button>
+						<button class="play player-icon"></button>
+						<button class="play-next player-icon"></button>
+
+					</div>
+					<div class="volume-player">
+						<div id="muteButton" class="muteButton">
+							<button class="play-volume player-icon"></button>
+						</div>
+						<input class="soundVolume" id="soundVolume" type="range" min="0" max="1" step="0.01">
+					</div>
 				</div>
+				<div class="track-name"></div>
+				<div class="duration-player">
+					<input class="soundProgress" id="soundProgress" type="range" min="0" max="1" step="0.01">
+					<div class="duration-timer">
+						<div id="timer" class="timer-header"></div>
+						/
+						<div id="duration"></div>
+					</div>
+				</div>
+
 				<ul class="play-list"></ul>
 			</div>
 			<div class="weather">
