@@ -8,7 +8,7 @@ function showTime() {
 	time.textContent = currentTime
 	showDate()
 	showGreeting()
-	setTimeout(showTime, 990);
+	setTimeout(showTime, 1000);
 }
 showTime();
 
@@ -57,18 +57,18 @@ window.addEventListener('load', getLocalStorage)
 
 // ? Slider bg
 
-let randomNum
+let randomNum = String(randomNumber(1, 20)).padStart(2, '0')
 let loading = true
 
-function bgNum(mi, ma) {
+function randomNumber(mi, ma) {
 	let min = Math.ceil(mi);
 	let max = Math.floor(ma);
-	const result = String(Math.floor(Math.random() * (max - min + 1)) + min)
-	randomNum = result.padStart(2, '0')
+	const result = Math.floor(Math.random() * (max - min + 1)) + min
+	return result
 }
 
 
-bgNum(1, 20)
+
 
 
 
@@ -181,6 +181,22 @@ city.addEventListener('change', function () {
 function weatherSave(value) {
 	localStorage.setItem('currentNameCity', value)
 }
+
+// Quote
+
+async function getQuotes() {
+	const quote = document.querySelector('.quote')
+	const author = document.querySelector('.author')
+	const quotes = 'assets/json/data.json';
+	const res = await fetch(quotes);
+	const data = await res.json();
+	const randomQuote = data.quotes[randomNumber(0, data.quotes.length - 1)]
+	quote.textContent = `"${randomQuote.quote}"`
+	author.textContent = randomQuote.author
+}
+getQuotes();
+
+document.querySelector('.change-quote').addEventListener('click', getQuotes)
 
 
 
