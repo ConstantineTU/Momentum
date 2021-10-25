@@ -5,24 +5,25 @@ const playList = [
 		duration: '01:00'
 	},
 	{
-		title: 'Ennio Morricone',
-		src: '../assets/sounds/Ennio Morricone.mp3',
-		duration: '01:37'
+		title: 'Damma Beatz',
+		src: '../assets/sounds/Damma Beatz, Cushy & Ballpoint - Redial.mp3',
+		duration: '02:29'
 	},
 	{
-		title: 'River Flows In You',
-		src: '../assets/sounds/River Flows In You.mp3',
-		duration: '03:50'
+		title: 'Gregorian - Still Im Sad',
+		src: '../assets/sounds/Gregorian - Still Im Sad.mp3',
+		duration: '04:59'
 	},
 	{
-		title: 'Summer Wind',
-		src: '../assets/sounds/Summer Wind.mp3',
-		duration: '01:50'
+		title: 'Jeff Van Dyck - Divinitus',
+		src: '../assets/sounds/Jeff Van Dyck - Divinitus.mp3',
+		duration: '01:48'
 	},
 	{
-		title: 'This is wonderful',
-		src: '../assets/sounds/This is wonderful.mp3',
-		duration: '00:16'
+		title: 'Motoi Sakuraba - Majula',
+		src: '../assets/sounds/Motoi Sakuraba - Majula.mp3',
+		duration: '03:19'
 	}
+
 ]
 export default playList

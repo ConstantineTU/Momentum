@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Arial-MT";
+  src: url("../assets/fonts/Arial-MT.woff");
+}
+
 * {
   padding: 0px;
   margin: 0px;
@@ -37,7 +42,7 @@ body {
 
 body {
   line-height: 1;
-  font-family: "Roboto", sans serif;
+  font-family: "Arial", sans-serif;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -46,7 +51,7 @@ body {
 input,
 button,
 textarea {
-  font-family: "Roboto", sans serif;
+  font-family: "Arial", sans-serif;
 }
 
 input::-ms-clear {
@@ -886,8 +891,9 @@ body._lock {
 
 .play-list {
   text-align: left;
-  overflow: scroll / hidden;
-  max-height: 100px;
+  overflow: hidden;
+  overflow-y: visible;
+  max-height: 150px;
 }
 
 .play-item {
@@ -1100,7 +1106,7 @@ body._lock {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin: 10px 0px 18px 0px;
+  margin: 10px 0px 10px 0px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -1216,6 +1222,10 @@ body._lock {
   text-align: left;
 }
 
+.weather.russian {
+  width: 225px;
+}
+
 .weather-error {
   margin-top: -10px;
 }
@@ -1252,6 +1262,10 @@ body._lock {
   outline: 0;
   border-bottom: 1px solid #fff;
   background-color: transparent;
+}
+
+.city.russian {
+  width: 225px;
 }
 
 .city::-webkit-input-placeholder {
@@ -1328,6 +1342,12 @@ body._lock {
 .slide-next {
   right: 20px;
   background-image: url("../assets/img/svg/slider-next.svg");
+}
+
+.slide-prev.disabled,
+.slide-next.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .time {
@@ -1439,6 +1459,116 @@ body._lock {
 
 .author {
   min-height: 20px;
+}
+
+.footer-container {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.quotes-wrap {
+  margin: 0px 15px;
+}
+
+.footer-lang {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.footer-lang .eng {
+  opacity: 0.7;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.footer-lang .eng.active {
+  opacity: 0.8;
+  color: #c5b358;
+}
+
+.footer-lang .eng:hover {
+  opacity: 1;
+}
+
+.footer-lang .rus {
+  opacity: 0.7;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.footer-lang .rus.active {
+  opacity: 0.8;
+  color: #c5b358;
+}
+
+.footer-lang .rus:hover {
+  opacity: 1;
+}
+
+.github-api,
+.unsplash-api,
+.flickr-api {
+  font-size: 22px;
+  font-weight: 700;
+  opacity: 0.7;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.github-api.active,
+.unsplash-api.active,
+.flickr-api.active {
+  opacity: 0.8;
+  color: #c5b358;
+}
+
+.github-api:hover,
+.unsplash-api:hover,
+.flickr-api:hover {
+  opacity: 1;
+}
+
+.settings-icon {
+  background-image: url("../assets/img/svg/settings.svg");
+  width: 32px;
+  height: 32px;
+  background-size: 32px 32px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+  opacity: 0.8;
+  cursor: pointer;
+  -webkit-transition: opacity 0.3s, -webkit-transform 1s;
+  transition: opacity 0.3s, -webkit-transform 1s;
+  -o-transition: opacity 0.3s, transform 1s;
+  transition: opacity 0.3s, transform 1s;
+  transition: opacity 0.3s, transform 1s, -webkit-transform 1s;
+}
+
+.settings-icon:hover {
+  opacity: 1;
+}
+
+.settings-icon.active {
+  -webkit-transform: rotate(115deg);
+      -ms-transform: rotate(115deg);
+          transform: rotate(115deg);
 }
 
 @media (max-width: 1452px) {

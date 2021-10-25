@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html class="_webp" lang="ru">
-
 <head>
 	<title>Momentum</title>
 	<meta charset="UTF-8" />
@@ -13,45 +12,45 @@
 
 	<div class="wrapper">
 		<header class="header">
-			<div class="player">
-				<div class="player-wrap">
-					<div class="player-controls">
-						<button class="play-prev player-icon"></button>
-						<button class="play player-icon"></button>
-						<button class="play-next player-icon"></button>
+	<div class="player">
+		<div class="player-wrap">
+			<div class="player-controls">
+				<button class="play-prev player-icon"></button>
+				<button class="play player-icon"></button>
+				<button class="play-next player-icon"></button>
 
-					</div>
-					<div class="volume-player">
-						<div id="muteButton" class="muteButton">
-							<button class="play-volume player-icon"></button>
-						</div>
-						<input class="soundVolume" id="soundVolume" type="range" min="0" max="1" step="0.01">
-					</div>
+			</div>
+			<div class="volume-player">
+				<div id="muteButton" class="muteButton">
+					<button class="play-volume player-icon"></button>
 				</div>
-				<div class="track-name"></div>
-				<div class="duration-player">
-					<input class="soundProgress" id="soundProgress" type="range" min="0" max="1" step="0.01">
-					<div class="duration-timer">
-						<div id="timer" class="timer-header"></div>
-						/
-						<div id="duration"></div>
-					</div>
-				</div>
+				<input class="soundVolume" id="soundVolume" type="range" min="0" max="1" step="0.01">
+			</div>
+		</div>
+		<div class="track-name"></div>
+		<div class="duration-player">
+			<input class="soundProgress" id="soundProgress" type="range" min="0" max="1" step="0.01">
+			<div class="duration-timer">
+				<div id="timer" class="timer-header"></div>
+				/
+				<div id="duration"></div>
+			</div>
+		</div>
 
-				<ul class="play-list"></ul>
-			</div>
-			<div class="weather">
-				<input type="text" class="city" placeholder="[Enter sity]" />
-				<i class="weather-icon owf"></i>
-				<div class="weather-error"></div>
-				<div class="description-container">
-					<span class="temperature"></span>
-					<span class="weather-description"></span>
-				</div>
-				<div class="wind"></div>
-				<div class="humidity"></div>
-			</div>
-		</header>
+		<ul class="play-list"></ul>
+	</div>
+	<div class="weather">
+		<input type="text" class="city" placeholder="[Enter sity]" />
+		<i class="weather-icon owf"></i>
+		<div class="weather-error"></div>
+		<div class="description-container">
+			<span class="temperature"></span>
+			<span class="weather-description"></span>
+		</div>
+		<div class="wind"></div>
+		<div class="humidity"></div>
+	</div>
+</header>
 		<div class="page">
 
 			<main class="main">
@@ -70,12 +69,28 @@
 		</div>
 
 		<footer class="footer">
+	<div class="settings-wrap">
+		<div class="settings-container">
+
+		</div>
+	</div>
+	<div class="footer-container">
+		<div class="footer-settings">
+			<div class="settings-icon"></div>
+			<div class="github-api active">GitHub</div>
+			<div class="unsplash-api">Unsplash API</div>
+			<div class="flickr-api">Flickr API</div>
+		</div>
+		<div class="quotes-wrap">
 			<button class="change-quote"></button>
 			<div>
 				<div class="quote"></div>
 				<div class="author"></div>
 			</div>
-		</footer>
+		</div>
+		<div class="footer-lang"><span class="eng active">Eng</span>/<span class="rus">Rus</span></div>
+	</div>
+</footer>
 	</div>
 	<script type="module" src="js/app.js"></script>
 </body>
