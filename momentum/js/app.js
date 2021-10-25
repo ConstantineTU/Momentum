@@ -4,6 +4,142 @@ let isRussian = false
 let isApiFlickr = false
 let isApiUnsplash = false
 
+if (localStorage.getItem('isRussian') && localStorage.getItem('isRussian') !== 'undefined') {
+	if (localStorage.getItem('isRussian') === 'true') {
+		isRussian = true
+	} else {
+		isRussian = false
+	}
+} else {
+	isRussian = false
+}
+
+// ! Settings Hide
+
+let timeIsHidden
+let dateIsHidden
+let greetingIsHidden
+let quoteIsHidden
+let weatherIsHidden
+let playerIsHidden
+
+
+
+function eventListenersSettingsBlocks() {
+	const timeBtnHide = document.querySelector('.time-block')
+	const time = document.querySelector('.time')
+	const dateBtnHide = document.querySelector('.date-block')
+	const date = document.querySelector('.date')
+	const greetingBtnHide = document.querySelector('.greeting-block')
+	const greeting = document.querySelector('.greeting-container')
+	const quoteBtnHide = document.querySelector('.quote-block')
+	const quote = document.querySelector('.quotes-wrap')
+	const weatherBtnHide = document.querySelector('.weather-block')
+	const weather = document.querySelector('.weather')
+	const playerBtnHide = document.querySelector('.player-block')
+	const player = document.querySelector('.player')
+
+	function loadSettingsBlocks() {
+
+		if (localStorage.getItem('timeIsHidden') === 'true') {
+			timeIsHidden = true
+			time.classList.add('hide')
+			timeBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('timeIsHidden') === 'false') {
+			timeIsHidden = false
+			time.classList.remove('hide')
+			timeBtnHide.classList.add('active')
+		}
+		if (localStorage.getItem('dateIsHidden') === 'true') {
+			dateIsHidden = true
+			date.classList.add('hide')
+			dateBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('dateIsHidden') === 'false') {
+			dateIsHidden = false
+			date.classList.remove('hide')
+			dateBtnHide.classList.add('active')
+		}
+		if (localStorage.getItem('greetingIsHidden') === 'true') {
+			greetingIsHidden = true
+			greeting.classList.add('hide')
+			greetingBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('greetingIsHidden') === 'false') {
+			greetingIsHidden = false
+			greeting.classList.remove('hide')
+			greetingBtnHide.classList.add('active')
+		}
+		if (localStorage.getItem('quoteIsHidden') === 'true') {
+			quoteIsHidden = true
+			quote.classList.add('hide')
+			quoteBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('quoteIsHidden') === 'false') {
+			quoteIsHidden = false
+			quote.classList.remove('hide')
+			quoteBtnHide.classList.add('active')
+		}
+		if (localStorage.getItem('weatherIsHidden') === 'true') {
+			weatherIsHidden = true
+			weather.classList.add('hide')
+			weatherBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('weatherIsHidden') === 'false') {
+			weatherIsHidden = false
+			weather.classList.remove('hide')
+			weatherBtnHide.classList.add('active')
+		}
+		if (localStorage.getItem('playerIsHidden') === 'true') {
+			playerIsHidden = true
+			player.classList.add('hide')
+			playerBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('playerIsHidden') === 'false') {
+			playerIsHidden = false
+			player.classList.remove('hide')
+			playerBtnHide.classList.add('active')
+		}
+
+	}
+
+	loadSettingsBlocks()
+
+	timeBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		time.classList.toggle('hide')
+		timeIsHidden = timeIsHidden ? false : true
+		localStorage.setItem('timeIsHidden', timeIsHidden)
+	})
+	dateBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		date.classList.toggle('hide')
+		dateIsHidden = dateIsHidden ? false : true
+		localStorage.setItem('dateIsHidden', dateIsHidden)
+
+	})
+	greetingBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		greeting.classList.toggle('hide')
+		greetingIsHidden = greetingIsHidden ? false : true
+		localStorage.setItem('greetingIsHidden', greetingIsHidden)
+	})
+	quoteBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		quote.classList.toggle('hide')
+		quoteIsHidden = quoteIsHidden ? false : true
+		localStorage.setItem('quoteIsHidden', quoteIsHidden)
+	})
+	weatherBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		weather.classList.toggle('hide')
+		weatherIsHidden = weatherIsHidden ? false : true
+		localStorage.setItem('weatherIsHidden', weatherIsHidden)
+	})
+	playerBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		player.classList.toggle('hide')
+		playerIsHidden = playerIsHidden ? false : true
+		localStorage.setItem('playerIsHidden', playerIsHidden)
+	})
+}
+eventListenersSettingsBlocks()
+
 // ! Часы и время 
 
 function showTime() {
@@ -116,10 +252,10 @@ function setBg() {
 function setBgFirstLoad() {
 	const body = document.querySelector('body')
 	const img = new Image()
-	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg`
+	img.src = `https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDayForBg()}/${randomNum}.jpg`
 	img.onload = () => {
 		body.style.backgroundImage =
-			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDay()}/${randomNum}.jpg')`
+			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDayForBg()}/${randomNum}.jpg')`
 	}
 }
 
@@ -514,6 +650,20 @@ function checkLanguage() {
 	const weather = document.querySelector('.weather')
 	const city = document.querySelector('.city')
 	const nameInput = document.querySelector('.name')
+
+	const timeBtnHide = document.querySelector('.time-block')
+	const dateBtnHide = document.querySelector('.date-block')
+	const greetingBtnHide = document.querySelector('.greeting-block')
+	const quoteBtnHide = document.querySelector('.quote-block')
+	const weatherBtnHide = document.querySelector('.weather-block')
+	const playerBtnHide = document.querySelector('.player-block')
+	const todolistBtnHide = document.querySelector('.todolist-block')
+	const settingSubtittle = document.querySelector('.settings-subtittle')
+	const show = document.getElementById('show')
+	const language = document.getElementById('language')
+	const tegsForApi = document.getElementById('tegsForApi')
+	const imagesSource = document.getElementById('imagesSource')
+
 	if (isRussian) {
 		weather.classList.add('russian')
 		city.classList.add('russian')
@@ -521,6 +671,20 @@ function checkLanguage() {
 		nameInput.placeholder = '[Введите имя]'
 		engBtn.textContent = 'Анг'
 		rusBtn.textContent = 'Рус'
+
+		timeBtnHide.textContent = 'Время'
+		dateBtnHide.textContent = 'Дату'
+		greetingBtnHide.textContent = 'Приветствие'
+		quoteBtnHide.textContent = 'Цитату'
+		weatherBtnHide.textContent = 'Погоду'
+		playerBtnHide.textContent = 'Аудиоплеер'
+		todolistBtnHide.textContent = 'Cписок дел'
+		settingSubtittle.textContent = 'Настройки видимости панелей'
+		show.textContent = 'Показать'
+		language.textContent = 'Язык приложения'
+		tegsForApi.textContent = 'Теги'
+		imagesSource.textContent = 'Источник изображений'
+
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
 	} else {
@@ -530,6 +694,22 @@ function checkLanguage() {
 		nameInput.placeholder = '[Enter name]'
 		engBtn.textContent = 'Eng'
 		rusBtn.textContent = 'Rus'
+
+
+		timeBtnHide.textContent = 'Time'
+		dateBtnHide.textContent = 'Date'
+		greetingBtnHide.textContent = 'Greeting'
+		quoteBtnHide.textContent = 'Quote'
+		weatherBtnHide.textContent = 'Weather'
+		playerBtnHide.textContent = 'Audio'
+		todolistBtnHide.textContent = 'Todolist'
+		settingSubtittle.textContent = 'Customize your dashboard'
+		show.textContent = 'Show'
+		language.textContent = 'Language'
+		tegsForApi.textContent = 'Tegs for API'
+		imagesSource.textContent = 'Images source'
+
+
 		engBtn.classList.add('active')
 		rusBtn.classList.remove('active')
 	}
@@ -543,6 +723,7 @@ function changeLanguageEng() {
 		showTime()
 		getWeather()
 		checkLanguage()
+		localStorage.setItem('isRussian', isRussian)
 	}
 }
 
@@ -553,6 +734,7 @@ function changeLanguageRus() {
 		showTime()
 		getWeather()
 		checkLanguage()
+		localStorage.setItem('isRussian', isRussian)
 	}
 }
 engBtn.addEventListener('click', changeLanguageEng)
@@ -638,6 +820,21 @@ githubBtn.addEventListener('click', function () {
 		setBg()
 	}
 })
+
+const settingsBtn = document.querySelector('.settings-icon')
+const settingsWrap = document.querySelector('.settings-wrap')
+
+function showSettings() {
+	settingsBtn.classList.toggle('active')
+	settingsWrap.classList.toggle('active')
+}
+
+settingsBtn.addEventListener('click', showSettings)
+
+
+
+
+
 
 
 
