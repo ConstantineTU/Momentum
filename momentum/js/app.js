@@ -1,8 +1,11 @@
 
 import playList from './playList.js'
 let isRussian = false
-let isApiFlickr = false
-let isApiUnsplash = false
+let isApiFlickr
+let isApiUnsplash
+
+
+
 
 if (localStorage.getItem('isRussian') && localStorage.getItem('isRussian') !== 'undefined') {
 	if (localStorage.getItem('isRussian') === 'true') {
@@ -22,6 +25,7 @@ let greetingIsHidden
 let quoteIsHidden
 let weatherIsHidden
 let playerIsHidden
+let todoIsHidden
 
 
 
@@ -38,6 +42,9 @@ function eventListenersSettingsBlocks() {
 	const weather = document.querySelector('.weather')
 	const playerBtnHide = document.querySelector('.player-block')
 	const player = document.querySelector('.player')
+	const todoBtnHide = document.querySelector('.todolist-block')
+	const todo = document.querySelector('.todo-wrap')
+	const todoIcon = document.querySelector('.todo-icon')
 
 	function loadSettingsBlocks() {
 
@@ -95,6 +102,17 @@ function eventListenersSettingsBlocks() {
 			player.classList.remove('hide')
 			playerBtnHide.classList.add('active')
 		}
+		if (localStorage.getItem('todoIsHidden') === 'true') {
+			todoIsHidden = true
+			todo.classList.add('hide')
+			todoIcon.classList.add('hide')
+			todoBtnHide.classList.remove('active')
+		} else if (localStorage.getItem('todoIsHidden') === 'false') {
+			todoIsHidden = false
+			todo.classList.remove('hide')
+			todoIcon.classList.remove('hide')
+			todoBtnHide.classList.add('active')
+		}
 
 	}
 
@@ -136,6 +154,13 @@ function eventListenersSettingsBlocks() {
 		player.classList.toggle('hide')
 		playerIsHidden = playerIsHidden ? false : true
 		localStorage.setItem('playerIsHidden', playerIsHidden)
+	})
+	todoBtnHide.addEventListener('click', function () {
+		this.classList.toggle('active')
+		todo.classList.toggle('hide')
+		todoIcon.classList.toggle('hide')
+		todoIsHidden = todoIsHidden ? false : true
+		localStorage.setItem('todoIsHidden', todoIsHidden)
 	})
 }
 eventListenersSettingsBlocks()
@@ -246,7 +271,11 @@ function setBg() {
 	img.onload = () => {
 		body.style.backgroundImage =
 			`url('https://raw.githubusercontent.com/ConstantineTU/stage1-tasks/assets/images/${getTimeOfDayForBg()}/${randomNum}.jpg')`
-		setTimeout(() => { loading = true }, 1100)
+		setTimeout(() => {
+			loading = true
+			document.querySelector('.slide-prev').classList.remove('disabled')
+			document.querySelector('.slide-next').classList.remove('disabled')
+		}, 1200)
 	}
 }
 function setBgFirstLoad() {
@@ -265,12 +294,10 @@ setBgFirstLoad()
 document.querySelector('.slide-prev').addEventListener('click', function () {
 	this.classList.add('disabled')
 	getSlidePrev()
-	setTimeout(() => { this.classList.remove('disabled') }, 1200)
 })
 document.querySelector('.slide-next').addEventListener('click', function () {
 	this.classList.add('disabled')
 	getSlideNext()
-	setTimeout(() => { this.classList.remove('disabled') }, 1200)
 })
 
 function getSlideNext() {
@@ -663,6 +690,7 @@ function checkLanguage() {
 	const language = document.getElementById('language')
 	const tegsForApi = document.getElementById('tegsForApi')
 	const imagesSource = document.getElementById('imagesSource')
+	const todoInput = document.querySelector('.todo-input')
 
 	if (isRussian) {
 		weather.classList.add('russian')
@@ -684,6 +712,7 @@ function checkLanguage() {
 		language.textContent = 'Язык приложения'
 		tegsForApi.textContent = 'Теги'
 		imagesSource.textContent = 'Источник изображений'
+		todoInput.placeholder = 'Новая задача'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -708,6 +737,7 @@ function checkLanguage() {
 		language.textContent = 'Language'
 		tegsForApi.textContent = 'Tegs for API'
 		imagesSource.textContent = 'Images source'
+		todoInput.placeholder = 'New todo'
 
 
 		engBtn.classList.add('active')
@@ -753,15 +783,20 @@ async function getUnsplashToImage() {
 	const res = await fetch(url);
 	const data = await res.json();
 	urlApiUnsplash = data.urls.regular
+	setTimeout(() => {
+		loading = true
+		document.querySelector('.slide-prev').classList.remove('disabled')
+		document.querySelector('.slide-next').classList.remove('disabled')
+	}, 1200)
 }
 getUnsplashToImage()
 // ! 9 API Images Flickr
 
 const albomsFlickr = {
-	night: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720062587146&extras=url_h&format=json&nojsoncallback=1',
-	morning: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720069530982&extras=url_h&format=json&nojsoncallback=1',
-	afternoon: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111881805&extras=url_h&format=json&nojsoncallback=1',
-	evening: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=98bdf49bfcda58a0e5188de75b74e79c&gallery_id=185118123-72157720111880160&extras=url_h&format=json&nojsoncallback=1'
+	night: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=87978b32968522241562a49c932bdf6b&gallery_id=185118123-72157720062587146&extras=url_h&format=json&nojsoncallback=1',
+	morning: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=87978b32968522241562a49c932bdf6b&gallery_id=185118123-72157720069530982&extras=url_h&format=json&nojsoncallback=1',
+	afternoon: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=87978b32968522241562a49c932bdf6b&gallery_id=185118123-72157720111881805&extras=url_h&format=json&nojsoncallback=1',
+	evening: 'https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=87978b32968522241562a49c932bdf6b&gallery_id=185118123-72157720111880160&extras=url_h&format=json&nojsoncallback=1'
 }
 
 async function getFlickrToImage() {
@@ -770,8 +805,18 @@ async function getFlickrToImage() {
 	const data = await res.json();
 	if (data.photos.photo[randomNumForApi].url_h) {
 		urlApiFlickr = data.photos.photo[randomNumForApi].url_h
+		setTimeout(() => {
+			loading = true
+			document.querySelector('.slide-prev').classList.remove('disabled')
+			document.querySelector('.slide-next').classList.remove('disabled')
+		}, 1200)
 	} else {
 		urlApiFlickr = `https://farm${data.photos.photo[randomNumForApi].farm}.staticflickr.com/${data.photos.photo[randomNumForApi].server}/${data.photos.photo[randomNumForApi].id}_${data.photos.photo[randomNumForApi].secret}.jpg`
+		setTimeout(() => {
+			loading = true
+			document.querySelector('.slide-prev').classList.remove('disabled')
+			document.querySelector('.slide-next').classList.remove('disabled')
+		}, 1200)
 	}
 }
 getFlickrToImage()
@@ -785,12 +830,13 @@ function setBgApi() {
 	} else if (isApiUnsplash) {
 		getUnsplashToImage()
 		img.src = urlApiUnsplash
+
 	} else {
 		setBg()
 	}
 	img.onload = () => {
 		body.style.backgroundImage = `url('${img.src}')`
-		setTimeout(() => { loading = true }, 1100)
+
 	}
 }
 apiFlickrBtn.addEventListener('click', function () {
@@ -799,7 +845,10 @@ apiFlickrBtn.addEventListener('click', function () {
 	apiFlickrBtn.classList.add('active')
 	isApiFlickr = true
 	isApiUnsplash = false
+	localStorage.setItem('isApiFlickr', isApiFlickr)
+	localStorage.setItem('isApiUnsplash', isApiUnsplash)
 	setBgApi()
+
 })
 apiUnsplashBtn.addEventListener('click', function () {
 	githubBtn.classList.remove('active')
@@ -807,17 +856,23 @@ apiUnsplashBtn.addEventListener('click', function () {
 	apiFlickrBtn.classList.remove('active')
 	isApiFlickr = false
 	isApiUnsplash = true
+	localStorage.setItem('isApiFlickr', isApiFlickr)
+	localStorage.setItem('isApiUnsplash', isApiUnsplash)
 	setBgApi()
+
 })
 githubBtn.addEventListener('click', function () {
 	if (isApiFlickr || isApiUnsplash) {
-		console.log(1)
 		githubBtn.classList.add('active')
 		apiUnsplashBtn.classList.remove('active')
 		apiFlickrBtn.classList.remove('active')
 		isApiFlickr = false
 		isApiUnsplash = false
+		localStorage.setItem('isApiFlickr', isApiFlickr)
+		localStorage.setItem('isApiUnsplash', isApiUnsplash)
 		setBg()
+
+
 	}
 })
 
@@ -832,9 +887,113 @@ function showSettings() {
 settingsBtn.addEventListener('click', showSettings)
 
 
+// TodoList
+
+const todoIcon = document.querySelector('.todo-icon')
+const todoWrap = document.querySelector('.todo-wrap')
 
 
+todoIcon.addEventListener('click', function () {
+	this.classList.toggle('active')
+	todoWrap.classList.toggle('active')
+})
 
+let todoItems
+for (let i = 0; i < 50; i++) {
+	if (localStorage.getItem(`todoItems${i}`)) {
+		const todoItemLi = document.createElement('li')
+		const todoListUl = document.querySelector('.todo-list')
+		todoItemLi.classList.add('todo-item')
+		todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
+		todoListUl.append(todoItemLi)
+		todoItems = document.querySelectorAll('.todo-item')
+		for (let j = 0; j < todoItems.length; j++) {
+			todoItems[j].addEventListener('click', function () {
+				todoItems[j].classList.add('done')
+
+				if (todoItems[j].classList.contains('done')) {
+					localStorage.removeItem(`todoItems${j}`)
+				} else {
+					localStorage.setItem(`todoItems${j}`, todoItems[j].innerText)
+				}
+			})
+		}
+
+	}
+}
+
+getInputValue()
+function getInputValue() {
+	const todoInput = document.querySelector('.todo-input')
+	function createToDo() {
+		const todoItemLi = document.createElement('li')
+		const todoListUl = document.querySelector('.todo-list')
+		todoItemLi.classList.add('todo-item')
+		todoItemLi.textContent = todoInput.value
+		todoListUl.append(todoItemLi)
+		todoInput.value = ''
+		todoItems = document.querySelectorAll('.todo-item')
+		for (let i = 0; i < todoItems.length; i++) {
+			localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
+			todoItems[i].addEventListener('click', function () {
+				todoItems[i].classList.add('done')
+				if (todoItems[i].classList.contains('done')) {
+					localStorage.removeItem(`todoItems${i}`)
+				} else {
+
+					localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
+				}
+			})
+		}
+
+	}
+
+	todoInput.addEventListener("keypress", (keyPressed) => {
+		const keyEnter = 13;
+		if (keyPressed.which == keyEnter && todoInput.value !== '') {
+			createToDo();
+		}
+	})
+
+}
+
+
+if (localStorage.getItem('isApiFlickr') === 'true') {
+	isApiFlickr = true
+	githubBtn.classList.remove('active')
+	apiUnsplashBtn.classList.remove('active')
+	apiFlickrBtn.classList.add('active')
+	setBgApi()
+
+} else {
+	isApiFlickr = false
+}
+if (localStorage.getItem('isApiUnsplash') === 'true') {
+	isApiUnsplash = true
+	githubBtn.classList.remove('active')
+	apiUnsplashBtn.classList.add('active')
+	apiFlickrBtn.classList.remove('active')
+	setBgApi()
+} else {
+	isApiUnsplash = false
+}
+
+console.group('%cCross-check: Momentum, ConstantineTU', 'color: red')
+console.log('%cНе выполненные пункты: если источником получения фото указан API, в настройках приложения можно указать тег/теги, для которых API будет присылает фото 0 из 3', 'color: red')
+console.log(
+	`Score 150 / 150
+
+	Выполненные пункты: Все пункты, которые не указаны - выполены
+	Своя собственная фича - todolist справа снизу, помимо этого плеер сохраняет время и песню при перезагрузке.
+	 `
+)
+console.log('%cПрошу вас, если Unsplash API  выдаёт ошибку 403 то прошу вас перепроверить работу через 1 час, так как лимит на изображения закончился', 'color: blue')
+console.log('	%cИтого 157 баллов из 160', 'color: green')
+
+console.log('%cМой дискорд - https://discordapp.com/users/414360051101466624', 'color: blue')
+console.log('%cСпасибо за проверку и удачи в учёбе!', 'color: green')
+
+console.groupEnd()
 
 
 
