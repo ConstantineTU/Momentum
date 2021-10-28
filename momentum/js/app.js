@@ -691,6 +691,8 @@ function checkLanguage() {
 	const tegsForApi = document.getElementById('tegsForApi')
 	const imagesSource = document.getElementById('imagesSource')
 	const todoInput = document.querySelector('.todo-input')
+	const todoTittle = document.querySelector('.todo-tittle')
+	const todoTrash = document.querySelector('.todo-controlls-trash')
 
 	if (isRussian) {
 		weather.classList.add('russian')
@@ -713,6 +715,8 @@ function checkLanguage() {
 		tegsForApi.textContent = 'Теги'
 		imagesSource.textContent = 'Источник изображений'
 		todoInput.placeholder = 'Новая задача'
+		todoTittle.textContent = 'Список дел'
+		todoTrash.title = 'Удалить выполненные задачи'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -738,6 +742,8 @@ function checkLanguage() {
 		tegsForApi.textContent = 'Tegs for API'
 		imagesSource.textContent = 'Images source'
 		todoInput.placeholder = 'New todo'
+		todoTittle.textContent = 'Todolist'
+		todoTrash.title = 'Delete completed todo'
 
 
 		engBtn.classList.add('active')
@@ -899,32 +905,44 @@ todoIcon.addEventListener('click', function () {
 })
 
 let todoItems
-for (let i = 0; i < 50; i++) {
-	if (localStorage.getItem(`todoItems${i}`)) {
-		const todoItemLi = document.createElement('li')
-		const todoListUl = document.querySelector('.todo-list')
-		todoItemLi.classList.add('todo-item')
-		todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
-		todoListUl.append(todoItemLi)
-		todoItems = document.querySelectorAll('.todo-item')
-		for (let j = 0; j < todoItems.length; j++) {
-			todoItems[j].addEventListener('click', function () {
-				todoItems[j].classList.add('done')
 
-				if (todoItems[j].classList.contains('done')) {
-					localStorage.removeItem(`todoItems${j}`)
-				} else {
-					localStorage.setItem(`todoItems${j}`, todoItems[j].innerText)
-				}
-			})
-		}
-
-	}
-}
 
 getInputValue()
 function getInputValue() {
 	const todoInput = document.querySelector('.todo-input')
+	let itemsArr = []
+	for (let i = 0; i < 50; i++) {
+		if (localStorage.getItem(`todoItems${i}`)) {
+			itemsArr.push(localStorage.getItem(`todoItems${i}`))
+		}
+	}
+	for (let i = 0; i < 50; i++) {
+		localStorage.removeItem(`todoItems${i}`)
+	}
+	for (let i = 0; i < itemsArr.length; i++) {
+		localStorage.setItem(`todoItems${i}`, itemsArr[i])
+	}
+
+	for (let i = 0; i < 50; i++) {
+		if (localStorage.getItem(`todoItems${i}`)) {
+			const todoItemLi = document.createElement('li')
+			const todoListUl = document.querySelector('.todo-list')
+			todoItemLi.classList.add('todo-item')
+			todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
+			todoListUl.append(todoItemLi)
+			todoItems = document.querySelectorAll('.todo-item')
+			for (let j = 0; j < todoItems.length; j++) {
+				todoItems[j].onclick = function () {
+					todoItems[j].classList.toggle('done')
+					if (todoItems[j].classList.contains('done')) {
+						localStorage.removeItem(`todoItems${j}`)
+					} else {
+						localStorage.setItem(`todoItems${j}`, todoItems[j].innerText)
+					}
+				}
+			}
+		}
+	}
 	function createToDo() {
 		const todoItemLi = document.createElement('li')
 		const todoListUl = document.querySelector('.todo-list')
@@ -934,27 +952,48 @@ function getInputValue() {
 		todoInput.value = ''
 		todoItems = document.querySelectorAll('.todo-item')
 		for (let i = 0; i < todoItems.length; i++) {
-			localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
-			todoItems[i].addEventListener('click', function () {
-				todoItems[i].classList.add('done')
+			if (!todoItems[i].classList.contains('done')) {
+				localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
+			}
+			todoItems[i].onclick = function () {
+				todoItems[i].classList.toggle('done')
 				if (todoItems[i].classList.contains('done')) {
 					localStorage.removeItem(`todoItems${i}`)
 				} else {
-
 					localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
 				}
-			})
+			}
 		}
 
 	}
 
 	todoInput.addEventListener("keypress", (keyPressed) => {
-		const keyEnter = 13;
-		if (keyPressed.which == keyEnter && todoInput.value !== '') {
-			createToDo();
+		const items = document.querySelectorAll('.todo-item')
+		if (items.length <= 30) {
+			todoInput.classList.remove('error')
+			const keyEnter = 13;
+			if (keyPressed.which == keyEnter && todoInput.value !== '') {
+				createToDo();
+			}
+		} else {
+			todoInput.classList.add('error')
 		}
 	})
 
+	function deleteTodoItems() {
+		const todoItems = document.querySelectorAll('.todo-item')
+		for (let i = 0; i < todoItems.length; i++) {
+			if (todoItems[i].classList.contains('done')) {
+				localStorage.removeItem(`todoItems${i}`)
+				todoItems[i].remove()
+				todoInput.classList.remove('error')
+			}
+		}
+
+	}
+
+	const todoTrash = document.querySelector('.todo-controlls-trash')
+	todoTrash.addEventListener('click', deleteTodoItems)
 }
 
 
@@ -984,14 +1023,15 @@ console.log(
 	`Score 150 / 150
 
 	Выполненные пункты: Все пункты, которые не указаны - выполены
-	Своя собственная фича - todolist справа снизу, помимо этого плеер сохраняет время и песню при перезагрузке.
+	Своя собственная фича - todolist справа снизу, он сохраняется при перезагрузки, выполненные задачи удаляются после перезагрузки или при нажатии на кнопку корзина
+	 помимо этого плеер сохраняет время и песню при перезагрузке.
 	 `
 )
-console.log('%cПрошу вас, если Unsplash API  выдаёт ошибку 403 то прошу вас перепроверить работу через 1 час, так как лимит на изображения закончился', 'color: blue')
+console.log('%cЕсли Unsplash API  выдаёт ошибку 403, то прошу вас перепроверить работу через 1 час, так как лимит на изображения закончился', 'color: blue')
 console.log('	%cИтого 157 баллов из 160', 'color: green')
 
-console.log('%cМой дискорд - https://discordapp.com/users/414360051101466624', 'color: blue')
-console.log('%cСпасибо за проверку и удачи в учёбе!', 'color: green')
+console.log('%cМой дискорд - https://discordapp.com/users/414360051101466624 , если вам понравилась моя работа, пожалуйста добавьте её в лучшие https://forms.gle/Xc9RVjEWTTGF6ubK8', 'color: blue')
+console.log('%cСпасибо за проверку и успехов в учёбе!', 'color: green')
 
 console.groupEnd()
 
