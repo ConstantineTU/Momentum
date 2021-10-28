@@ -420,27 +420,76 @@ function weatherSave(value) {
 }
 
 // ! Quote
-
+let isAnimation = false
 async function getQuotes() {
 	const quote = document.querySelector('.quote')
 	const author = document.querySelector('.author')
+	const qouteAnimationPrint = document.querySelector('.quote-print')
 	let quotes
-	if (isRussian) {
-		quotes = 'assets/json/dataru.json'
-	} else {
-		quotes = 'assets/json/data.json'
+	if (!isAnimation) {
+
+		if (isRussian) {
+			quotes = 'assets/json/dataru.json'
+		} else {
+			quotes = 'assets/json/data.json'
+		}
+
+		const res = await fetch(quotes)
+		const data = await res.json()
+		const randomQuote = data.quotes[randomNumber(0, data.quotes.length - 1)]
+		author.style.transition = '1s'
+		author.style.opacity = '0'
+		getPrintText()
+		isAnimation = true
+		function getPrintText() {
+			let index = 0
+			let result = ''
+			setTimeout(function timeOutPrint() {
+				result = `${result}${randomQuote.quote[index]}`
+				quote.innerHTML = `"${result}`
+				qouteAnimationPrint.classList.remove('end')
+				index++
+				if (result.length < randomQuote.quote.length) {
+					setTimeout(timeOutPrint, rundomPrintTime(50, 70))
+				} else {
+					quote.innerHTML = `"${result}"`
+					qouteAnimationPrint.classList.add('end')
+					author.style.opacity = '1'
+					author.textContent = randomQuote.author
+					setTimeout(() => {
+						isAnimation = false
+					}, 500);
+				}
+			}, rundomPrintTime(50, 70));
+			function rundomPrintTime(min, max) {
+				const result = Math.ceil(Math.random(max) * (max - min + 1) + min)
+				return result
+			}
+		}
 	}
 
-	const res = await fetch(quotes)
-	const data = await res.json()
-	const randomQuote = data.quotes[randomNumber(0, data.quotes.length - 1)]
-	quote.textContent = `"${randomQuote.quote}"`
-	author.textContent = randomQuote.author
 }
 getQuotes();
 
 document.querySelector('.change-quote').addEventListener('click', getQuotes)
 
+// Quote animation
+function animationQuote() {
+	const quoteBtn = document.querySelector('.change-quote')
+
+	function rotateQuoteBtn() {
+		if (!isAnimation) {
+			isAnimation = true
+			quoteBtn.classList.add('rotate')
+			quoteBtn.addEventListener('animationend', function () {
+				quoteBtn.classList.remove('rotate')
+			})
+		}
+	}
+	quoteBtn.addEventListener('click', rotateQuoteBtn)
+}
+animationQuote()
+//
 // ! audio player
 
 let isPlay = false
@@ -692,7 +741,6 @@ function checkLanguage() {
 	const imagesSource = document.getElementById('imagesSource')
 	const todoInput = document.querySelector('.todo-input')
 	const todoTittle = document.querySelector('.todo-tittle')
-	const todoTrash = document.querySelector('.todo-controlls-trash')
 
 	if (isRussian) {
 		weather.classList.add('russian')
@@ -716,7 +764,6 @@ function checkLanguage() {
 		imagesSource.textContent = 'Источник изображений'
 		todoInput.placeholder = 'Новая задача'
 		todoTittle.textContent = 'Список дел'
-		todoTrash.title = 'Удалить выполненные задачи'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -743,7 +790,6 @@ function checkLanguage() {
 		imagesSource.textContent = 'Images source'
 		todoInput.placeholder = 'New todo'
 		todoTittle.textContent = 'Todolist'
-		todoTrash.title = 'Delete completed todo'
 
 
 		engBtn.classList.add('active')
@@ -911,43 +957,69 @@ getInputValue()
 function getInputValue() {
 	const todoInput = document.querySelector('.todo-input')
 	let itemsArr = []
+	let doneArr = []
 	for (let i = 0; i < 50; i++) {
 		if (localStorage.getItem(`todoItems${i}`)) {
 			itemsArr.push(localStorage.getItem(`todoItems${i}`))
+
+		}
+		if (localStorage.getItem(`doneItem${i}`)) {
+			// doneArr.push(localStorage.getItem(`doneItem${i}`))
 		}
 	}
 	for (let i = 0; i < 50; i++) {
 		localStorage.removeItem(`todoItems${i}`)
+		// localStorage.removeItem(`doneItem${i}`)
 	}
 	for (let i = 0; i < itemsArr.length; i++) {
 		localStorage.setItem(`todoItems${i}`, itemsArr[i])
 	}
+	// for (let i = 0; i < doneArr.length; i++) {
+	// 	localStorage.setItem(`doneItem${i}`, doneArr[i])
+	// }
 
 	for (let i = 0; i < 50; i++) {
 		if (localStorage.getItem(`todoItems${i}`)) {
 			const todoItemLi = document.createElement('li')
 			const todoListUl = document.querySelector('.todo-list')
+			const todoTrashClone = document.createElement('div')
+			todoTrashClone.classList.add('todo-controlls-trash')
 			todoItemLi.classList.add('todo-item')
 			todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
+			todoItemLi.append(todoTrashClone)
+
 			todoListUl.append(todoItemLi)
 			todoItems = document.querySelectorAll('.todo-item')
+			// if (localStorage.getItem(`doneItem${i}`) && localStorage.getItem(`doneItem${i}`) !== 'undefined') {
+			// 	todoItems[i].classList.add('done')
+			// }
 			for (let j = 0; j < todoItems.length; j++) {
 				todoItems[j].onclick = function () {
 					todoItems[j].classList.toggle('done')
 					if (todoItems[j].classList.contains('done')) {
-						localStorage.removeItem(`todoItems${j}`)
+						localStorage.setItem(`doneItem${j}`, j)
 					} else {
-						localStorage.setItem(`todoItems${j}`, todoItems[j].innerText)
+						localStorage.removeItem(`doneItem${j}`)
 					}
 				}
 			}
+			const todosTrash = document.querySelectorAll('.todo-controlls-trash')
+			todosTrash.forEach(todoTrash => (todoTrash.onclick = function () {
+				deleteTodoItems(this.parentNode)
+			}))
 		}
 	}
 	function createToDo() {
 		const todoItemLi = document.createElement('li')
 		const todoListUl = document.querySelector('.todo-list')
+		const todoTrashClone = document.createElement('div')
+		todoTrashClone.classList.add('todo-controlls-trash')
 		todoItemLi.classList.add('todo-item')
 		todoItemLi.textContent = todoInput.value
+		todoItemLi.append(todoTrashClone)
+
+
+
 		todoListUl.append(todoItemLi)
 		todoInput.value = ''
 		todoItems = document.querySelectorAll('.todo-item')
@@ -958,12 +1030,16 @@ function getInputValue() {
 			todoItems[i].onclick = function () {
 				todoItems[i].classList.toggle('done')
 				if (todoItems[i].classList.contains('done')) {
-					localStorage.removeItem(`todoItems${i}`)
+					localStorage.setItem(`doneItem${i}`, i)
 				} else {
-					localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
+					localStorage.removeItem(`doneItem${i}`)
 				}
 			}
 		}
+		const todosTrash = document.querySelectorAll('.todo-controlls-trash')
+		todosTrash.forEach(todoTrash => (todoTrash.onclick = function () {
+			deleteTodoItems(this.parentNode)
+		}))
 
 	}
 
@@ -980,20 +1056,20 @@ function getInputValue() {
 		}
 	})
 
-	function deleteTodoItems() {
-		const todoItems = document.querySelectorAll('.todo-item')
+	function deleteTodoItems(target) {
 		for (let i = 0; i < todoItems.length; i++) {
-			if (todoItems[i].classList.contains('done')) {
+			if (todoItems[i].classList.contains('done') && target === todoItems[i]) {
 				localStorage.removeItem(`todoItems${i}`)
 				todoItems[i].remove()
 				todoInput.classList.remove('error')
+
+				// localStorage.removeItem(`doneItem${i}`)
+
 			}
 		}
-
 	}
 
-	const todoTrash = document.querySelector('.todo-controlls-trash')
-	todoTrash.addEventListener('click', deleteTodoItems)
+
 }
 
 
@@ -1017,13 +1093,16 @@ if (localStorage.getItem('isApiUnsplash') === 'true') {
 	isApiUnsplash = false
 }
 
+
+
+
 console.group('%cCross-check: Momentum, ConstantineTU', 'color: red')
 console.log('%cНе выполненные пункты: если источником получения фото указан API, в настройках приложения можно указать тег/теги, для которых API будет присылает фото 0 из 3', 'color: red')
 console.log(
 	`Score 150 / 150
 
 	Выполненные пункты: Все пункты, которые не указаны - выполены
-	Своя собственная фича - todolist справа снизу, он сохраняется при перезагрузки, выполненные задачи удаляются после перезагрузки или при нажатии на кнопку корзина
+	Своя собственная фича - todolist справа снизу, он сохраняется при перезагрузке, выполненные задачи удаляются после перезагрузке или при нажатии на кнопку корзина
 	 помимо этого плеер сохраняет время и песню при перезагрузке.
 	 `
 )
@@ -1034,6 +1113,7 @@ console.log('%cМой дискорд - https://discordapp.com/users/414360051101
 console.log('%cСпасибо за проверку и успехов в учёбе!', 'color: green')
 
 console.groupEnd()
+
 
 
 
