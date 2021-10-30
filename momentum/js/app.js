@@ -203,7 +203,7 @@ function getTimeOfDay() {
 		else return 'evening'
 	} else {
 		if (hours / 6 < 1) return 'Доброй ночи'
-		else if (hours / 6 < 2) return 'Доброго утра'
+		else if (hours / 6 < 2) return 'Доброе утро'
 		else if (hours / 6 < 3) return 'Добрый день'
 		else return 'Добрый вечер'
 	}
@@ -348,12 +348,13 @@ if (localStorage.getItem('currentNameCity') && localStorage.getItem('currentName
 }
 let currentNameCity = city.value
 async function getWeather() {
-	const weatherIcon = document.querySelector('.weather-icon')
-	const temperature = document.querySelector('.temperature')
-	const weatherDescription = document.querySelector('.weather-description')
-	const weatherError = document.querySelector('.weather-error')
-	const humidity = document.querySelector('.humidity')
-	const wind = document.querySelector('.wind')
+	const weather = document.querySelector('.weather')
+	const weatherIcon = weather.querySelector('.weather-icon')
+	const temperature = weather.querySelector('.temperature')
+	const weatherDescription = weather.querySelector('.weather-description')
+	const weatherError = weather.querySelector('.weather-error')
+	const humidity = weather.querySelector('.humidity')
+	const wind = weather.querySelector('.wind')
 
 	let url
 	// TODO Добавить смену языка
@@ -366,46 +367,61 @@ async function getWeather() {
 	}
 
 	const res = await fetch(url)
-	if (res.status !== 404 && res.status !== 400) {
-		const data = await res.json()
-		weatherError.textContent = ''
-		city.value = data.name
-		weatherSave(city.value)
-		weatherIcon.className = 'weather-icon owf'
-		weatherIcon.classList.add(`owf-${data.weather[0].id}`)
-		temperature.textContent = `${Math.floor(data.main.temp)}°C`
-		weatherDescription.textContent = data.weather[0].description
-		if (!isRussian) {
-			wind.textContent = `Wind speed: ${Math.floor(data.wind.speed)} m/s`
-			humidity.textContent = `Humidity: ${Math.floor(data.main.humidity)}%`
-		} else {
-			wind.textContent = `Скорость ветра: ${Math.floor(data.wind.speed)} м/с`
-			humidity.textContent = `Влажность воздуха: ${Math.floor(data.main.humidity)}%`
-		}
+	const data = await res.json()
+	function checkResize() {
+		if (res.status === 200) {
+			weather.classList.remove('error')
+			weatherError.textContent = ''
+			city.value = data.name
+			weatherSave(city.value)
+			weatherIcon.className = 'weather-icon owf'
+			weatherIcon.classList.add(`owf-${data.weather[0].id}`)
 
-	} else if (res.status === 400) {
-		if (!isRussian) {
-			weatherError.textContent = `Error! Nothing to geocode for ''!`
+			temperature.textContent = `${Math.floor(data.main.temp)}°C`
+			weatherDescription.textContent = data.weather[0].description[0].toUpperCase() + data.weather[0].description.slice(1)
+			if (!isRussian) {
+				if (window.matchMedia("(max-width: 768.98px)").matches) {
+					wind.textContent = `${Math.floor(data.wind.speed)} m/s`
+					humidity.textContent = `${Math.floor(data.main.humidity)}%`
+				} else {
+					wind.textContent = `Wind speed: ${Math.floor(data.wind.speed)} m/s`
+					humidity.textContent = `Humidity: ${Math.floor(data.main.humidity)}%`
+				}
+
+			} else {
+				if (window.matchMedia("(max-width: 768.98px)").matches) {
+					wind.textContent = `${Math.floor(data.wind.speed)} м/с`
+					humidity.textContent = `${Math.floor(data.main.humidity)}%`
+				} else {
+					wind.textContent = `Скорость ветра: ${Math.floor(data.wind.speed)} м/с`
+					humidity.textContent = `Влажность воздуха: ${Math.floor(data.main.humidity)}%`
+				}
+			}
+
+
+		} else if (res.status === 400) {
+			if (!isRussian) {
+				weatherError.textContent = `Enter city name`
+			} else {
+				weatherError.textContent = `Введите название города.`
+			}
+			weatherIcon.className = 'weather-icon owf'
+			weather.classList.add('error')
 		} else {
-			weatherError.textContent = `Пожалуйста введите название города.`
+			weather.classList.add('error')
+			if (!isRussian) {
+				weatherError.textContent = `City '${currentNameCity}' not found`
+			} else {
+				weatherError.textContent = `Город '${currentNameCity}' не найден.`
+			}
+			weatherIcon.className = 'weather-icon owf'
+
 		}
-		weatherIcon.className = 'weather-icon owf'
-		temperature.textContent = ''
-		weatherDescription.textContent = ''
-		wind.textContent = ''
-		humidity.textContent = ''
-	} else {
-		if (!isRussian) {
-			weatherError.textContent = `Error! city not found for '${currentNameCity}'!`
-		} else {
-			weatherError.textContent = `Город '${currentNameCity}' не найден. Пожалуйста введите корректное название города.`
-		}
-		weatherIcon.className = 'weather-icon owf'
-		temperature.textContent = ''
-		weatherDescription.textContent = ''
-		wind.textContent = ''
-		humidity.textContent = ''
 	}
+	checkResize()
+	window.addEventListener('resize', function () {
+		checkResize()
+	})
 }
 
 getWeather()
@@ -697,8 +713,8 @@ function loadSoundSettings() {
 	}
 }
 loadSoundSettings()
-timer.textContent = '00:00'
-duration.textContent = '01:00'
+timer.textContent = '0:00'
+duration.textContent = '1:00'
 function changeProgressAudio() {
 	const timer = document.getElementById('timer')
 	const duration = document.getElementById('duration')
@@ -718,6 +734,20 @@ function changeProgressAudio() {
 }
 audio.addEventListener('timeupdate', changeProgressAudio)
 
+// TODO advance-settigs audio-player
+function advacedPlayerUp() {
+	const playList = document.querySelector('.play-list')
+	const playListBtn = document.querySelector('.play-list-button')
+
+	function showPlayList() {
+		playList.classList.toggle('active')
+		playListBtn.classList.toggle('active')
+	}
+
+	playListBtn.addEventListener('click', showPlayList)
+}
+
+advacedPlayerUp()
 // ! translate for Russian language
 const engBtn = document.querySelector('.eng')
 const rusBtn = document.querySelector('.rus')
@@ -742,6 +772,10 @@ function checkLanguage() {
 	const todoInput = document.querySelector('.todo-input')
 	const todoTittle = document.querySelector('.todo-tittle')
 
+	const todoDeleteDone = document.getElementById('todoDeleteDone')
+	const todoDeleteAll = document.getElementById('todoDeleteAll')
+	const todoDeleteBtn = document.getElementById('todoDeleteBtn')
+
 	if (isRussian) {
 		weather.classList.add('russian')
 		city.classList.add('russian')
@@ -763,7 +797,10 @@ function checkLanguage() {
 		tegsForApi.textContent = 'Теги'
 		imagesSource.textContent = 'Источник изображений'
 		todoInput.placeholder = 'Новая задача'
-		todoTittle.textContent = 'Список дел'
+		todoTittle.textContent = 'Задачи'
+		todoDeleteDone.textContent = 'Выполенные'
+		todoDeleteAll.textContent = 'Всё'
+		todoDeleteBtn.textContent = 'Удалить'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -789,12 +826,19 @@ function checkLanguage() {
 		tegsForApi.textContent = 'Tegs for API'
 		imagesSource.textContent = 'Images source'
 		todoInput.placeholder = 'New todo'
-		todoTittle.textContent = 'Todolist'
+		todoTittle.textContent = 'Todo'
+		todoDeleteDone.textContent = 'Done'
+		todoDeleteAll.textContent = 'All'
+		todoDeleteBtn.textContent = 'Clear'
 
 
 		engBtn.classList.add('active')
 		rusBtn.classList.remove('active')
 	}
+	setInterval(() => {
+		console.log('10 минут прошло, обновляю погоду')
+		checkLanguage()
+	}, 600000);
 }
 checkLanguage()
 
@@ -830,18 +874,18 @@ let apiFlickrBtn = document.querySelector('.flickr-api')
 let apiUnsplashBtn = document.querySelector('.unsplash-api')
 let githubBtn = document.querySelector('.github-api')
 
-async function getUnsplashToImage() {
-	const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`;
-	const res = await fetch(url);
-	const data = await res.json();
-	urlApiUnsplash = data.urls.regular
-	setTimeout(() => {
-		loading = true
-		document.querySelector('.slide-prev').classList.remove('disabled')
-		document.querySelector('.slide-next').classList.remove('disabled')
-	}, 1200)
-}
-getUnsplashToImage()
+// async function getUnsplashToImage() {
+// 	const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`;
+// 	const res = await fetch(url);
+// 	const data = await res.json();
+// 	urlApiUnsplash = data.urls.regular
+// 	setTimeout(() => {
+// 		loading = true
+// 		document.querySelector('.slide-prev').classList.remove('disabled')
+// 		document.querySelector('.slide-next').classList.remove('disabled')
+// 	}, 1200)
+// }
+// getUnsplashToImage()
 // ! 9 API Images Flickr
 
 const albomsFlickr = {
@@ -928,26 +972,53 @@ githubBtn.addEventListener('click', function () {
 	}
 })
 
+const todoIcon = document.querySelector('.todo-icon')
+const todoWrap = document.querySelector('.todo-wrap')
 const settingsBtn = document.querySelector('.settings-icon')
 const settingsWrap = document.querySelector('.settings-wrap')
+const overlay = document.querySelector('.overlay')
 
 function showSettings() {
+	todoIcon.classList.remove('active')
+	todoWrap.classList.remove('active')
 	settingsBtn.classList.toggle('active')
 	settingsWrap.classList.toggle('active')
+	if (settingsBtn.classList.contains('active')) {
+		overlay.classList.add('active')
+	} else {
+		overlay.classList.remove('active')
+
+	}
+}
+
+function closeAll() {
+	overlay.classList.remove('active')
+	settingsBtn.classList.remove('active')
+	settingsWrap.classList.remove('active')
+	todoIcon.classList.remove('active')
+	todoWrap.classList.remove('active')
 }
 
 settingsBtn.addEventListener('click', showSettings)
-
+overlay.addEventListener('click', closeAll)
 
 // TodoList
 
-const todoIcon = document.querySelector('.todo-icon')
-const todoWrap = document.querySelector('.todo-wrap')
+
 
 
 todoIcon.addEventListener('click', function () {
 	this.classList.toggle('active')
 	todoWrap.classList.toggle('active')
+	settingsBtn.classList.remove('active')
+	settingsWrap.classList.remove('active')
+	if (todoIcon.classList.contains('active')) {
+		overlay.classList.add('active')
+	} else {
+		overlay.classList.remove('active')
+
+	}
+
 })
 
 let todoItems
@@ -1068,6 +1139,51 @@ function getInputValue() {
 			}
 		}
 	}
+	function showDeleteTodo() {
+		const todoDeleteDone = document.getElementById('todoDeleteDone')
+		const todoDeleteAll = document.getElementById('todoDeleteAll')
+		const todoDeleteWrap = document.getElementById('todoDeleteWrap')
+		const todoDeleteBtn = document.getElementById('todoDeleteBtn')
+		const todoDeleteClose = document.getElementById('todoDeleteClose')
+
+
+		function showTodoDeleteWrap() {
+			todoDeleteBtn.classList.toggle('active')
+			todoDeleteWrap.classList.toggle('active')
+		}
+
+		function deleteAllTodoItems() {
+			if (todoItems) {
+				for (let i = 0; i < todoItems.length; i++) {
+					localStorage.removeItem(`todoItems${i}`)
+					todoItems[i].remove()
+					todoInput.classList.remove('error')
+					// localStorage.removeItem(`doneItem${i}`)
+				}
+			}
+			showTodoDeleteWrap()
+		}
+
+		function deleteAllDoneTodoItems() {
+			if (todoItems) {
+				for (let i = 0; i < todoItems.length; i++) {
+					if (todoItems[i].classList.contains('done')) {
+						localStorage.removeItem(`todoItems${i}`)
+						todoItems[i].remove()
+						todoInput.classList.remove('error')
+						// localStorage.removeItem(`doneItem${i}`)
+					}
+				}
+			}
+			showTodoDeleteWrap()
+		}
+
+		todoDeleteBtn.addEventListener('click', showTodoDeleteWrap)
+		todoDeleteClose.addEventListener('click', showTodoDeleteWrap)
+		todoDeleteAll.addEventListener('click', deleteAllTodoItems)
+		todoDeleteDone.addEventListener('click', deleteAllDoneTodoItems)
+	}
+	showDeleteTodo()
 
 
 }
