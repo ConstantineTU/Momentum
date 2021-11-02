@@ -46,20 +46,23 @@
 			</div>
 			<div class="weather">
 				<input type="text" class="city" placeholder="[Enter sity]" />
-				<div class="city-wrap">
-					<i class="weather-icon owf"></i>
-					<div class="weather-description"></div>
+				<div class="temperature-wrap">
+					<div class="city-wrap">
+						<i class="weather-icon owf"></i>
+						<div class="weather-description"></div>
+					</div>
+					<div class="weather-wrap">
+						<div class="description-container">
+
+							<span class="temperature"></span>
+
+
+						</div>
+					</div>
 				</div>
 				<div class="weather-error"></div>
 
-				<div class="weather-wrap">
-					<div class="description-container">
 
-						<span class="temperature"></span>
-
-
-					</div>
-				</div>
 				<div class="weather-wrap">
 					<div class="wind"></div>
 				</div>
@@ -79,8 +82,10 @@
 				<time class="time"></time>
 				<date class="date"></date>
 				<div class="greeting-container">
+					<div class="greeting-col"></div>
 					<span class="greeting"></span>
 					<input type="text" class="name" placeholder="[Enter name]" />
+					<div class="greeting-col"></div>
 				</div>
 			</main>
 
@@ -88,29 +93,25 @@
 		<footer class="footer">
 
 			<div class="settings-wrap">
+				<input class="settings-menu-radio" type="radio" name="settingsMenu" id="menu-1" checked>
+				<input class="settings-menu-radio" type="radio" name="settingsMenu" id="menu-2">
+				<div class="settings-menu-wrap">
+
+
+					<label id="menu-btn-1" for="menu-1" class="settings-menu_main settings-menu-col">Main</label>
+
+					<label id="menu-btn-2" for="menu-2" class="settings-menu_images settings-menu-col">Images</label>
+				</div>
 				<div class="settings-container">
-					<div class="settings-top">
+					<div class="settings-main">
 						<div class="settings-column">
-							<div class="footer-settings">
-								<h2 id="imagesSource" class="settings-tittle">Images source</h2>
-								<div class="github-api active">GitHub</div>
-								<div class="unsplash-api">Unsplash</div>
-								<div class="flickr-api">Flickr</div>
-							</div>
-						</div>
-						<div class="settings-column">
-							<div class="footer-lang">
-								<h2 id="language" class="settings-tittle">Language</h2>
-								<div class=""><span class="eng active">Eng</span>/<span class="rus">Rus</span>
+							<div class="settings-column">
+								<div class="footer-lang">
+									<h2 id="language" class="settings-tittle">Language</h2>
+									<div class=""><span class="eng active">Eng</span>/<span class="rus">Rus</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					<div class="settings-main">
-						<div class="settings-column footer-settings">
-							<h2 id="tegsForApi" class="settings-tittle">Tegs for API</h2>
-						</div>
-						<div class="settings-column">
 							<h3 class="settings-subtittle">Customize your dashboard</h3>
 							<h2 id="show" class="settings-tittle main-tittle">Show</h2>
 							<div class="settings-block time-block active">Time</div>
@@ -121,6 +122,25 @@
 							<div class="settings-block player-block active">Audio</div>
 							<div class="settings-block todolist-block active">Todolist</div>
 						</div>
+
+						<div class="settings-column">
+
+							<div class="footer-settings">
+								<h2 id="imagesSource" class="settings-tittle">Images source</h2>
+								<div class="github-api active">GitHub</div>
+								<div class="unsplash-api">Unsplash</div>
+								<div class="flickr-api">Flickr</div>
+							</div>
+							<div class="settings-column">
+								<h2 id="tegsForApi" class="settings-tittle">Tegs for API</h2>
+							</div>
+						</div>
+
+
+					</div>
+					<div class="settings-main">
+
+
 					</div>
 				</div>
 			</div>
