@@ -874,18 +874,18 @@ let apiFlickrBtn = document.querySelector('.flickr-api')
 let apiUnsplashBtn = document.querySelector('.unsplash-api')
 let githubBtn = document.querySelector('.github-api')
 
-async function getUnsplashToImage() {
-	const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`;
-	const res = await fetch(url);
-	const data = await res.json();
-	urlApiUnsplash = data.urls.regular
-	setTimeout(() => {
-		loading = true
-		document.querySelector('.slide-prev').classList.remove('disabled')
-		document.querySelector('.slide-next').classList.remove('disabled')
-	}, 1200)
-}
-getUnsplashToImage()
+// async function getUnsplashToImage() {
+// 	const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`;
+// 	const res = await fetch(url);
+// 	const data = await res.json();
+// 	urlApiUnsplash = data.urls.regular
+// 	setTimeout(() => {
+// 		loading = true
+// 		document.querySelector('.slide-prev').classList.remove('disabled')
+// 		document.querySelector('.slide-next').classList.remove('disabled')
+// 	}, 1200)
+// }
+// getUnsplashToImage()
 // ! 9 API Images Flickr
 
 const albomsFlickr = {
