@@ -884,6 +884,33 @@ body._lock {
   padding: 20px;
 }
 
+.links_icon {
+  font-size: 22px;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 10px;
+  margin-top: -20px;
+  padding-top: 20px;
+  border-radius: 0 0 20px 20px;
+  cursor: pointer;
+}
+
+.links_wrap {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.9);
+  -webkit-transition: top 0.5s;
+  -o-transition: top 0.5s;
+  transition: top 0.5s;
+}
+
+.links_wrap.active {
+  top: 0;
+}
+
 .player-controls {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -947,6 +974,7 @@ body._lock {
 }
 
 .play-item {
+  position: relative;
   padding: 5px;
   list-style: none;
   opacity: 0.8;
@@ -970,33 +998,15 @@ body._lock {
   position: absolute;
   border-radius: 50%;
   top: calc(50% -7px);
-  left: 0;
+  left: -15px;
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
   transition: 0.3s;
   z-index: 2;
 }
 
-.play-item::after {
-  content: "";
-  width: 15px;
-  height: 15px;
-  background-size: contain;
-  position: absolute;
-  background-color: #000;
-  border-radius: 50%;
-  top: calc(50% -7px);
-  left: 0;
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
-  z-index: 1;
-}
-
 .item-active {
   color: #c5b358;
-  -webkit-animation: move-left 12s linear infinite;
-          animation: move-left 12s linear infinite;
 }
 
 .item-active::before {
@@ -1077,6 +1087,7 @@ body._lock {
   -webkit-transition: visibility 1s, opacity 1s;
   -o-transition: visibility 1s, opacity 1s;
   transition: visibility 1s, opacity 1s;
+  overflow: hidden;
 }
 
 .player-wrap {
@@ -1177,6 +1188,9 @@ body._lock {
   font-size: 20px;
   opacity: 0.8;
   height: 20px;
+  white-space: pre;
+  -webkit-animation: move-left 12s linear infinite;
+          animation: move-left 12s linear infinite;
 }
 
 .timer-header {
@@ -1665,14 +1679,7 @@ body._lock {
 }
 
 .quote {
-  min-height: 38px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  max-width: 100%;
+  display: inline;
   -webkit-transition: 1s;
   -o-transition: 1s;
   transition: 1s;
@@ -1705,21 +1712,20 @@ body._lock {
 }
 
 .quote-print {
-  min-height: 35px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
-  font-size: 26px;
+  font-size: 19px;
   font-family: "owfont", serif;
   font-weight: thin;
-  -webkit-animation: ease-in-out print 1s infinite;
-          animation: ease-in-out print 1s infinite;
+  -webkit-animation: cubic-bezier(1, 1, 0.01, 1) print 1s infinite;
+          animation: cubic-bezier(1, 1, 0.01, 1) print 1s infinite;
 }
 
 .quote-print.end {
@@ -1776,9 +1782,10 @@ body._lock {
   opacity: 0;
 }
 
-.github-api,
-.unsplash-api,
-.flickr-api {
+.github.-api,
+.unsplash.-api,
+.flickr.-api,
+.own.-api {
   position: relative;
   font-size: 22px;
   font-weight: 700;
@@ -1791,23 +1798,26 @@ body._lock {
   text-align: left;
 }
 
-.github-api:hover,
-.unsplash-api:hover,
-.flickr-api:hover {
+.github.-api:hover,
+.unsplash.-api:hover,
+.flickr.-api:hover,
+.own.-api:hover {
   opacity: 1;
   color: #c5b358;
 }
 
-.github-api.active,
-.unsplash-api.active,
-.flickr-api.active {
+.github.-api.active,
+.unsplash.-api.active,
+.flickr.-api.active,
+.own.-api.active {
   opacity: 1;
   color: #a79644;
 }
 
-.github-api::after,
-.unsplash-api::after,
-.flickr-api::after {
+.github.-api::after,
+.unsplash.-api::after,
+.flickr.-api::after,
+.own.-api::after {
   content: "";
   position: absolute;
   right: 75px;
@@ -1823,9 +1833,10 @@ body._lock {
   transition: 0.3s;
 }
 
-.github-api::before,
-.unsplash-api::before,
-.flickr-api::before {
+.github.-api::before,
+.unsplash.-api::before,
+.flickr.-api::before,
+.own.-api::before {
   content: "";
   position: absolute;
   right: 55px;
@@ -1838,17 +1849,19 @@ body._lock {
   z-index: 2;
 }
 
-.github-api.active::after,
-.unsplash-api.active::after,
-.flickr-api.active::after {
+.github.-api.active::after,
+.unsplash.-api.active::after,
+.flickr.-api.active::after,
+.own.-api.active::after {
   opacity: 1;
   right: 60px;
   background-color: #a79644;
 }
 
-.github-api.active::before,
-.unsplash-api.active::before,
-.flickr-api.active::before {
+.github.-api.active::before,
+.unsplash.-api.active::before,
+.flickr.-api.active::before,
+.own.-api.active::before {
   opacity: 1;
 }
 
@@ -2142,7 +2155,6 @@ body._lock {
 
 .settings-subtittle {
   color: #c5b358;
-  font-size: 17px;
   opacity: 0.6;
   margin: 0px 0px 5px 0px;
 }
@@ -2291,9 +2303,9 @@ body._lock {
   height: -moz-max-content;
   height: max-content;
   padding-bottom: 15px;
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
+  -webkit-transition: 0.3s, opacity 0.5s;
+  -o-transition: 0.3s, opacity 0.5s;
+  transition: 0.3s, opacity 0.5s;
 }
 
 .todo-item::before {
@@ -2316,6 +2328,7 @@ body._lock {
   content: "";
   width: 20px;
   height: 20px;
+  border-radius: 3px;
   background: #a79644;
   background-size: contain;
   position: absolute;
@@ -2339,11 +2352,20 @@ body._lock {
 
 .todo-item.done::after {
   opacity: 1;
-  width: 16px;
-  height: 18px;
-  left: 2px;
+  width: 20px;
+  height: 20px;
+  left: 0px;
   top: 0px;
   content: "\2713";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .todo-item.done:hover {
@@ -2354,17 +2376,34 @@ body._lock {
   opacity: 0.8;
 }
 
+.todo-item.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.todo-item.show {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.692);
+}
+
+.todo-item.show:hover {
+  color: white;
+}
+
+.todo-item.show:hover::after {
+  opacity: 0.9;
+}
+
 .todo-icon {
   position: relative;
   z-index: 6;
-  background-image: url("../assets/img/todolist.png");
+  background-image: url("../assets/img/svg/todolist.svg");
   width: 32px;
   height: 40px;
-  border-radius: 10px;
-  background-size: 32px 32px;
+  border-radius: 8px;
+  background-size: 72px 72px;
   background-position: center center;
   background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.7);
   border: 0;
   outline: 0;
   opacity: 0.8;
@@ -2374,9 +2413,9 @@ body._lock {
   -o-transition: opacity 0.3s, transform 0.5s;
   transition: opacity 0.3s, transform 0.5s;
   transition: opacity 0.3s, transform 0.5s, -webkit-transform 0.5s;
-  -webkit-transform: scale(1);
-      -ms-transform: scale(1);
-          transform: scale(1);
+  -webkit-transform: scale(0.8);
+      -ms-transform: scale(0.8);
+          transform: scale(0.8);
 }
 
 .todo-icon:hover {
@@ -2384,9 +2423,9 @@ body._lock {
 }
 
 .todo-icon.active {
-  -webkit-transform: scale(1.2);
-      -ms-transform: scale(1.2);
-          transform: scale(1.2);
+  -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+          transform: scale(1);
 }
 
 .todo-icon.hide {
@@ -2585,9 +2624,85 @@ body._lock {
           flex: 0 0 0;
 }
 
+.todo-done {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.todo-done-list {
+  overflow: hidden;
+  overflow-y: visible;
+}
+
+.todo-top {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  height: 25px;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.todo-top-radio {
+  display: none;
+}
+
+.todo-top_active-currenty {
+  margin-left: 3px;
+  font-size: 13px;
+  color: #c5b358;
+}
+
+.todo-top_done-currenty {
+  margin-left: 3px;
+  font-size: 13px;
+  color: #c5b358;
+}
+
+.todo-top-col {
+  position: relative;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  top: -3px;
+  padding: 3px;
+  height: 25px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px 10px 0 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  -webkit-box-shadow: 0px 2px 0px 1px #000;
+          box-shadow: 0px 2px 0px 1px #000;
+  -webkit-transition: 0.3s, -webkit-box-shadow 0.3s;
+  transition: 0.3s, -webkit-box-shadow 0.3s;
+  -o-transition: 0.3s, box-shadow 0.3s;
+  transition: 0.3s, box-shadow 0.3s;
+  transition: 0.3s, box-shadow 0.3s, -webkit-box-shadow 0.3s;
+  font-size: 20px;
+}
+
+.todo-top-col:hover {
+  color: white;
+}
+
 .todo-controlls {
   position: absolute;
-  top: -60px;
+  top: -70px;
   left: 0;
   height: 40px;
   width: 100%;
@@ -2643,6 +2758,39 @@ body._lock {
   -webkit-transform: scale(1.1);
       -ms-transform: scale(1.1);
           transform: scale(1.1);
+}
+
+#todo-top-1:checked ~ .todo-top #todo-top-btn-1 {
+  color: #fff;
+  top: -6px;
+  height: 31px;
+  -webkit-box-shadow: 0px 0px 0px 0px #000;
+          box-shadow: 0px 0px 0px 0px #000;
+}
+
+#todo-top-2:checked ~ .todo-top #todo-top-btn-2 {
+  color: #fff;
+  top: -6px;
+  height: 31px;
+  -webkit-box-shadow: 0px 0px 0px 0px #000;
+          box-shadow: 0px 0px 0px 0px #000;
+}
+
+.todo-main,
+.todo-done {
+  display: none;
+}
+
+#todo-top-1:checked ~ .todo-main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#todo-top-2:checked ~ .todo-done {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .github-icon {
@@ -2794,7 +2942,7 @@ body._lock {
   }
 
   40% {
-    margin-left: -200px;
+    margin-left: -600px;
   }
 
   41% {
@@ -2815,6 +2963,58 @@ body._lock {
 }
 
 @keyframes move-left {
+  0% {
+    margin-left: 0;
+  }
+
+  40% {
+    margin-left: -600px;
+  }
+
+  41% {
+    margin-left: 100000px;
+  }
+
+  42% {
+    margin-left: 250px;
+  }
+
+  80% {
+    margin-left: 0;
+  }
+
+  100% {
+    margin-left: 0;
+  }
+}
+
+@-webkit-keyframes move-leftmd2 {
+  0% {
+    margin-left: 0;
+  }
+
+  40% {
+    margin-left: -200px;
+  }
+
+  41% {
+    margin-left: 100000px;
+  }
+
+  42% {
+    margin-left: 250px;
+  }
+
+  80% {
+    margin-left: 0;
+  }
+
+  100% {
+    margin-left: 0;
+  }
+}
+
+@keyframes move-leftmd2 {
   0% {
     margin-left: 0;
   }
@@ -2890,6 +3090,9 @@ body._lock {
   }
 
   .track-name {
+    text-align: left;
+    -webkit-animation: move-leftmd2 12s linear infinite;
+            animation: move-leftmd2 12s linear infinite;
     font-size: 16px;
   }
 
@@ -2990,12 +3193,37 @@ body._lock {
     font-weight: 500;
   }
 
+  .quote-print {
+    font-size: 18px;
+  }
+
   .footer {
     min-height: 30vh;
   }
 
   .footer-body {
     max-width: 250px;
+  }
+
+  #menu-1:checked ~ .settings-container .settings-main {
+    margin-left: 0;
+  }
+
+  #menu-2:checked ~ .settings-container .settings-main {
+    margin-left: 0;
+  }
+
+  #mainMenu,
+  #langMenu {
+    display: none;
+  }
+
+  #menu-1:checked ~ .settings-container .settings-main #mainMenu {
+    display: block;
+  }
+
+  #menu-2:checked ~ .settings-container .settings-main #langMenu {
+    display: block;
   }
 }
 
@@ -3038,6 +3266,11 @@ body._lock {
     padding: 10px;
   }
 
+  .links_icon {
+    margin-top: -10px;
+    padding-top: 10px;
+  }
+
   .player-controls {
     min-width: 88px;
   }
@@ -3058,7 +3291,6 @@ body._lock {
 
   .player {
     width: 150px;
-    overflow: hidden;
   }
 
   .volume-player {
@@ -3071,10 +3303,6 @@ body._lock {
 
   .track-name {
     font-size: 14px;
-    text-align: left;
-    white-space: pre;
-    -webkit-animation: move-left 12s linear infinite;
-            animation: move-left 12s linear infinite;
   }
 
   .duration-timer {
@@ -3192,6 +3420,10 @@ body._lock {
     font-size: 16px;
   }
 
+  .quote-print {
+    font-size: 16px;
+  }
+
   .footer-body {
     max-width: 120px;
     min-width: 120px;
@@ -3256,9 +3488,9 @@ body._lock {
   }
 
   .todo-icon.active {
-    -webkit-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-            transform: scale(1.1);
+    -webkit-transform: scale(0.95);
+        -ms-transform: scale(0.95);
+            transform: scale(0.95);
   }
 
   .todo-wrap {

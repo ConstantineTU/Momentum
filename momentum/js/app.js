@@ -462,7 +462,10 @@ async function getQuotes() {
 			let result = ''
 			setTimeout(function timeOutPrint() {
 				result = `${result}${randomQuote.quote[index]}`
-				quote.innerHTML = `"${result}`
+
+				quote.innerHTML = `${result}`
+
+
 				qouteAnimationPrint.classList.remove('end')
 				index++
 				if (result.length < randomQuote.quote.length) {
@@ -775,6 +778,10 @@ function checkLanguage() {
 	const todoDeleteDone = document.getElementById('todoDeleteDone')
 	const todoDeleteAll = document.getElementById('todoDeleteAll')
 	const todoDeleteBtn = document.getElementById('todoDeleteBtn')
+	const todoActive = document.getElementById('todo-top-span-1')
+	const todoDone = document.getElementById('todo-top-span-2')
+	const menuMain = document.getElementById('menu-btn-1')
+	const menuImages = document.getElementById('menu-btn-2')
 
 	if (isRussian) {
 		weather.classList.add('russian')
@@ -801,6 +808,10 @@ function checkLanguage() {
 		todoDeleteDone.textContent = 'Выполенные'
 		todoDeleteAll.textContent = 'Всё'
 		todoDeleteBtn.textContent = 'Удалить'
+		todoActive.textContent = 'Активные'
+		todoDone.textContent = 'Выполненные'
+		menuMain.textContent = 'Главное'
+		menuImages.textContent = 'Изображения'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -830,13 +841,15 @@ function checkLanguage() {
 		todoDeleteDone.textContent = 'Done'
 		todoDeleteAll.textContent = 'All'
 		todoDeleteBtn.textContent = 'Clear'
-
+		todoActive.textContent = 'Active'
+		todoDone.textContent = 'Done'
+		menuMain.textContent = 'Main'
+		menuImages.textContent = 'Images'
 
 		engBtn.classList.add('active')
 		rusBtn.classList.remove('active')
 	}
 	setInterval(() => {
-		console.log('10 минут прошло, обновляю погоду')
 		checkLanguage()
 	}, 600000);
 }
@@ -870,9 +883,9 @@ rusBtn.addEventListener('click', changeLanguageRus)
 // ! 9 API Images Unsplash
 let urlApiFlickr
 let urlApiUnsplash
-let apiFlickrBtn = document.querySelector('.flickr-api')
-let apiUnsplashBtn = document.querySelector('.unsplash-api')
-let githubBtn = document.querySelector('.github-api')
+let apiFlickrBtn = document.querySelector('.flickr.-api')
+let apiUnsplashBtn = document.querySelector('.unsplash.-api')
+let githubBtn = document.querySelector('.github.-api')
 
 // async function getUnsplashToImage() {
 // 	const url = `https://api.unsplash.com/photos/random?orientation=landscape&query=${getTimeOfDayForBg()},nature&client_id=4zlg7vxd_ulCb_aTpZiwXv16GCqGfAOXokIEwa_JBhM`;
@@ -1022,62 +1035,174 @@ todoIcon.addEventListener('click', function () {
 })
 
 let todoItems
-
+let todoDoneItems
+let isDeleteTodo = false
+let isBlocked = false
+let activeCurrenty = 0
+let doneCurrenty = 0
 
 getInputValue()
 function getInputValue() {
 	const todoInput = document.querySelector('.todo-input')
-	let itemsArr = []
-	let doneArr = []
-	for (let i = 0; i < 50; i++) {
-		if (localStorage.getItem(`todoItems${i}`)) {
-			itemsArr.push(localStorage.getItem(`todoItems${i}`))
+	reverseTodoList()
+	function reverseTodoList() {
+		let itemsArr = []
+		let doneArr = []
+
+
+		for (let i = 0; i < 50; i++) {
+			if (localStorage.getItem(`NewDoneItem${i}`)) {
+				doneArr.push(localStorage.getItem(`NewDoneItem${i}`))
+
+			}
+			if (localStorage.getItem(`NewTodoItems${i}`)) {
+				itemsArr.push(localStorage.getItem(`NewTodoItems${i}`))
+			}
+		}
+
+		for (let i = 0; i < 50; i++) {
+			const li = localStorage.getItem(`todoItems${i}`)
+			const done = localStorage.getItem(`doneItem${i}`)
+			if (li && done !== `${i}` || li && done === null) {
+				itemsArr.push(li)
+			} else if (li && done === `${i}`) {
+				doneArr.push(li)
+			}
+		}
+
+		for (let i = 0; i < 50; i++) {
+			localStorage.removeItem(`todoItems${i}`)
+			localStorage.removeItem(`doneItem${i}`)
+			localStorage.removeItem(`NewTodoItems${i}`)
+			localStorage.removeItem(`NewDoneItem${i}`)
+		}
+		for (let i = 0; i < itemsArr.length; i++) {
+			localStorage.setItem(`todoItems${i}`, itemsArr[i])
 
 		}
-		if (localStorage.getItem(`doneItem${i}`)) {
-			// doneArr.push(localStorage.getItem(`doneItem${i}`))
+		for (let i = 0; i < doneArr.length; i++) {
+			localStorage.setItem(`NewDoneItem${i}`, doneArr[i])
 		}
-	}
-	for (let i = 0; i < 50; i++) {
-		localStorage.removeItem(`todoItems${i}`)
-		// localStorage.removeItem(`doneItem${i}`)
-	}
-	for (let i = 0; i < itemsArr.length; i++) {
-		localStorage.setItem(`todoItems${i}`, itemsArr[i])
-	}
-	// for (let i = 0; i < doneArr.length; i++) {
-	// 	localStorage.setItem(`doneItem${i}`, doneArr[i])
-	// }
+		activeCurrenty = itemsArr.length
+		doneCurrenty = doneArr.length
+		calculateTodos()
+		for (let i = 0; i < 50; i++) {
+			if (localStorage.getItem(`todoItems${i}`)) {
 
-	for (let i = 0; i < 50; i++) {
-		if (localStorage.getItem(`todoItems${i}`)) {
-			const todoItemLi = document.createElement('li')
-			const todoListUl = document.querySelector('.todo-list')
-			const todoTrashClone = document.createElement('div')
-			todoTrashClone.classList.add('todo-controlls-trash')
-			todoItemLi.classList.add('todo-item')
-			todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
-			todoItemLi.append(todoTrashClone)
+				const todoItemLi = document.createElement('li')
+				const todoListUl = document.querySelector('.todo-list')
+				const todoTrashClone = document.createElement('div')
+				todoTrashClone.classList.add('todo-controlls-trash')
+				todoItemLi.classList.add('todo-item')
+				todoItemLi.textContent = localStorage.getItem(`todoItems${i}`)
+				todoItemLi.append(todoTrashClone)
 
-			todoListUl.append(todoItemLi)
-			todoItems = document.querySelectorAll('.todo-item')
-			// if (localStorage.getItem(`doneItem${i}`) && localStorage.getItem(`doneItem${i}`) !== 'undefined') {
-			// 	todoItems[i].classList.add('done')
-			// }
-			for (let j = 0; j < todoItems.length; j++) {
-				todoItems[j].onclick = function () {
-					todoItems[j].classList.toggle('done')
-					if (todoItems[j].classList.contains('done')) {
-						localStorage.setItem(`doneItem${j}`, j)
-					} else {
-						localStorage.removeItem(`doneItem${j}`)
+				todoListUl.append(todoItemLi)
+				todoItems = todoListUl.querySelectorAll('.todo-item')
+				// if (localStorage.getItem(`doneItem${i}`) && localStorage.getItem(`doneItem${i}`) !== 'undefined') {
+				// 	todoItems[i].classList.add('done')
+				// }
+				for (let j = 0; j < todoItems.length; j++) {
+					todoItems[j].onclick = function () {
+						if (!isDeleteTodo && !isBlocked) {
+							todoItems[j].classList.toggle('done')
+							todoItems[j].classList.add('hide')
+
+							if (todoItems[j].classList.contains('done')) {
+								localStorage.setItem(`doneItem${j}`, j)
+							} else {
+								localStorage.removeItem(`doneItem${j}`)
+							}
+							isBlocked = true
+							setTimeout(() => {
+								deleteTodoItemsAndCreate()
+								reverseTodoList()
+								isBlocked = false
+							}, 500);
+
+						}
 					}
 				}
+				const todosTrash = document.querySelectorAll('.todo-controlls-trash')
+				todosTrash.forEach(todoTrash => (todoTrash.onclick = function () {
+					deleteTodoItems(this.parentNode)
+				}))
 			}
-			const todosTrash = document.querySelectorAll('.todo-controlls-trash')
-			todosTrash.forEach(todoTrash => (todoTrash.onclick = function () {
-				deleteTodoItems(this.parentNode)
-			}))
+
+		}
+		for (let i = 0; i < 50; i++) {
+
+			if (localStorage.getItem(`NewDoneItem${i}`)) {
+
+				const todoItemLi = document.createElement('li')
+				const todoDoneListUl = document.querySelector('.todo-done-list')
+				const todoTrashClone = document.createElement('div')
+				todoTrashClone.classList.add('todo-controlls-trash')
+				todoItemLi.classList.add('todo-item', 'done', 'show')
+				todoItemLi.textContent = localStorage.getItem(`NewDoneItem${i}`)
+				todoItemLi.append(todoTrashClone)
+
+				todoDoneListUl.append(todoItemLi)
+				todoDoneItems = todoDoneListUl.querySelectorAll('.todo-item')
+				for (let j = 0; j < todoDoneItems.length; j++) {
+					todoDoneItems[j].onclick = function () {
+						if (!isDeleteTodo && !isBlocked) {
+
+							todoDoneItems[j].classList.toggle('done')
+							todoDoneItems[j].classList.add('hide')
+							if (todoDoneItems[j].classList.contains('done')) {
+								localStorage.setItem(`NewDoneItem${j}`, j)
+								localStorage.removeItem(`NewTodoItems${j}`)
+
+							} else {
+
+								localStorage.removeItem(`NewDoneItem${j}`)
+								localStorage.setItem(`NewTodoItems${j}`, todoDoneItems[j].innerText)
+
+							}
+							isBlocked = true
+							setTimeout(() => {
+								deleteTodoItemsAndCreate()
+								reverseTodoList()
+								isBlocked = false
+							}, 500);
+
+						}
+					}
+				}
+
+				const todosTrash = todoDoneListUl.querySelectorAll('.todo-controlls-trash')
+				todosTrash.forEach(todoTrash => (todoTrash.onclick = function () {
+					deleteDoneTodoItems(this.parentNode)
+				}))
+			}
+
+		}
+	}
+	function calculateTodos() {
+		const activeCurrentyTodo = document.querySelector('.todo-top_active-currenty')
+		const doneCurrentyTodo = document.querySelector('.todo-top_done-currenty')
+
+		if (activeCurrenty) {
+			activeCurrentyTodo.textContent = activeCurrenty
+		} else { activeCurrentyTodo.textContent = ' ' }
+		if (doneCurrenty) {
+			doneCurrentyTodo.textContent = doneCurrenty
+		} else { doneCurrentyTodo.textContent = ' ' }
+	}
+	function deleteTodoItemsAndCreate() {
+		const todoListUl = document.querySelector('.todo-list')
+		todoItems = todoListUl.querySelectorAll('.todo-item')
+		const todoDoneListUl = document.querySelector('.todo-done-list')
+		todoDoneItems = todoDoneListUl.querySelectorAll('.todo-item')
+		for (let i = 0; i < 50; i++) {
+			if (todoItems[i]) {
+				todoItems[i].remove()
+			}
+			if (todoDoneItems[i]) {
+				todoDoneItems[i].remove()
+			}
+
 		}
 	}
 	function createToDo() {
@@ -1093,18 +1218,32 @@ function getInputValue() {
 
 		todoListUl.append(todoItemLi)
 		todoInput.value = ''
-		todoItems = document.querySelectorAll('.todo-item')
+		todoItems = todoListUl.querySelectorAll('.todo-item')
+		activeCurrenty = todoItems.length
+		calculateTodos()
 		for (let i = 0; i < todoItems.length; i++) {
-			if (!todoItems[i].classList.contains('done')) {
-				localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
-			}
+
+			localStorage.setItem(`todoItems${i}`, todoItems[i].innerText)
+
 			todoItems[i].onclick = function () {
-				todoItems[i].classList.toggle('done')
-				if (todoItems[i].classList.contains('done')) {
-					localStorage.setItem(`doneItem${i}`, i)
-				} else {
-					localStorage.removeItem(`doneItem${i}`)
+				if (!isDeleteTodo && !isBlocked) {
+					todoItems[i].classList.toggle('done')
+					todoItems[i].classList.add('hide')
+					if (todoItems[i].classList.contains('done')) {
+						localStorage.setItem(`doneItem${i}`, i)
+					} else {
+						localStorage.removeItem(`doneItem${i}`)
+					}
+					isBlocked = true
+					setTimeout(() => {
+						deleteTodoItemsAndCreate()
+						reverseTodoList()
+						isBlocked = false
+					}, 500);
+
 				}
+
+
 			}
 		}
 		const todosTrash = document.querySelectorAll('.todo-controlls-trash')
@@ -1115,7 +1254,7 @@ function getInputValue() {
 	}
 
 	todoInput.addEventListener("keypress", (keyPressed) => {
-		const items = document.querySelectorAll('.todo-item')
+		const items = document.querySelector('.todo-list').querySelectorAll('.todo-item')
 		if (items.length <= 30) {
 			todoInput.classList.remove('error')
 			const keyEnter = 13;
@@ -1128,16 +1267,34 @@ function getInputValue() {
 	})
 
 	function deleteTodoItems(target) {
+
 		for (let i = 0; i < todoItems.length; i++) {
 			if (todoItems[i].classList.contains('done') && target === todoItems[i]) {
 				localStorage.removeItem(`todoItems${i}`)
 				todoItems[i].remove()
 				todoInput.classList.remove('error')
-
-				// localStorage.removeItem(`doneItem${i}`)
-
+				isDeleteTodo = true
+				setTimeout(() => {
+					isDeleteTodo = false
+				}, 100);
 			}
 		}
+		activeCurrenty = todoItems.length
+		calculateTodos()
+	}
+	function deleteDoneTodoItems(target) {
+		for (let i = 0; i < todoDoneItems.length; i++) {
+			if (todoDoneItems[i].classList.contains('done') && target === todoDoneItems[i]) {
+				localStorage.removeItem(`NewDoneItem${i}`)
+				todoDoneItems[i].remove()
+				isDeleteTodo = true
+				setTimeout(() => {
+					isDeleteTodo = false
+				}, 100);
+			}
+		}
+		doneCurrenty = document.querySelector('.todo-done-list').querySelectorAll('.todo-item').length
+		calculateTodos()
 	}
 	function showDeleteTodo() {
 		const todoDeleteDone = document.getElementById('todoDeleteDone')
@@ -1145,6 +1302,7 @@ function getInputValue() {
 		const todoDeleteWrap = document.getElementById('todoDeleteWrap')
 		const todoDeleteBtn = document.getElementById('todoDeleteBtn')
 		const todoDeleteClose = document.getElementById('todoDeleteClose')
+		todoItems = document.querySelectorAll('.todo-item')
 
 
 		function showTodoDeleteWrap() {
@@ -1154,27 +1312,42 @@ function getInputValue() {
 
 		function deleteAllTodoItems() {
 			if (todoItems) {
+				todoItems = document.querySelectorAll('.todo-item')
 				for (let i = 0; i < todoItems.length; i++) {
 					localStorage.removeItem(`todoItems${i}`)
+					localStorage.removeItem(`NewDoneItem${i}`)
 					todoItems[i].remove()
 					todoInput.classList.remove('error')
 					// localStorage.removeItem(`doneItem${i}`)
 				}
 			}
+			activeCurrenty = 0
+			doneCurrenty = 0
+			calculateTodos()
 			showTodoDeleteWrap()
 		}
 
 		function deleteAllDoneTodoItems() {
 			if (todoItems) {
-				for (let i = 0; i < todoItems.length; i++) {
-					if (todoItems[i].classList.contains('done')) {
-						localStorage.removeItem(`todoItems${i}`)
-						todoItems[i].remove()
-						todoInput.classList.remove('error')
-						// localStorage.removeItem(`doneItem${i}`)
+				todoItems = document.querySelectorAll('.todo-item')
+				activeCurrenty = todoItems.length
+				for (let i = 0; i < 50; i++) {
+					if (todoItems[i]) {
+						localStorage.removeItem(`NewDoneItem${i}`)
+
+						if (todoItems[i].classList.contains('done')) {
+							todoItems[i].remove()
+							todoInput.classList.remove('error')
+							activeCurrenty--
+
+							// localStorage.removeItem(`doneItem${i}`)
+						}
 					}
 				}
 			}
+
+			doneCurrenty = 0
+			calculateTodos()
 			showTodoDeleteWrap()
 		}
 
@@ -1187,7 +1360,6 @@ function getInputValue() {
 
 
 }
-
 
 if (localStorage.getItem('isApiFlickr') === 'true') {
 	isApiFlickr = true
