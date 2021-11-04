@@ -462,10 +462,7 @@ async function getQuotes() {
 			let result = ''
 			setTimeout(function timeOutPrint() {
 				result = `${result}${randomQuote.quote[index]}`
-
-				quote.innerHTML = `${result}`
-
-
+				quote.innerHTML = `"${result}`
 				qouteAnimationPrint.classList.remove('end')
 				index++
 				if (result.length < randomQuote.quote.length) {
@@ -767,13 +764,13 @@ function checkLanguage() {
 	const weatherBtnHide = document.querySelector('.weather-block')
 	const playerBtnHide = document.querySelector('.player-block')
 	const todolistBtnHide = document.querySelector('.todolist-block')
-	const settingSubtittle = document.querySelector('.settings-subtittle')
+	const settingSubtitle = document.querySelector('.settings-subtitle')
 	const show = document.getElementById('show')
 	const language = document.getElementById('language')
 	const tegsForApi = document.getElementById('tegsForApi')
 	const imagesSource = document.getElementById('imagesSource')
 	const todoInput = document.querySelector('.todo-input')
-	const todoTittle = document.querySelector('.todo-tittle')
+	const todoTittle = document.querySelector('.todo-title')
 
 	const todoDeleteDone = document.getElementById('todoDeleteDone')
 	const todoDeleteAll = document.getElementById('todoDeleteAll')
@@ -782,6 +779,12 @@ function checkLanguage() {
 	const todoDone = document.getElementById('todo-top-span-2')
 	const menuMain = document.getElementById('menu-btn-1')
 	const menuImages = document.getElementById('menu-btn-2')
+
+	const linksIcon = document.querySelector('.links_icon')
+	const linksAddTitle = document.querySelector('.links_item-add-title')
+	const linksAddName = document.querySelector('.links_item-add-name')
+	const linksAddUrl = document.querySelector('.links_item-add-url')
+
 
 	if (isRussian) {
 		weather.classList.add('russian')
@@ -798,7 +801,7 @@ function checkLanguage() {
 		weatherBtnHide.textContent = 'Погоду'
 		playerBtnHide.textContent = 'Аудиоплеер'
 		todolistBtnHide.textContent = 'Cписок дел'
-		settingSubtittle.textContent = 'Настройки видимости панелей'
+		settingSubtitle.textContent = 'Настройки видимости панелей'
 		show.textContent = 'Показать'
 		language.textContent = 'Язык приложения'
 		tegsForApi.textContent = 'Теги'
@@ -812,6 +815,10 @@ function checkLanguage() {
 		todoDone.textContent = 'Выполненные'
 		menuMain.textContent = 'Главное'
 		menuImages.textContent = 'Изображения'
+		linksIcon.textContent = 'Закладки'
+		linksAddTitle.textContent = 'Новая закладка'
+		linksAddName.placeholder = 'Введите название'
+		linksAddUrl.placeholder = 'Вставьте ссылку'
 
 		engBtn.classList.remove('active')
 		rusBtn.classList.add('active')
@@ -831,7 +838,7 @@ function checkLanguage() {
 		weatherBtnHide.textContent = 'Weather'
 		playerBtnHide.textContent = 'Audio'
 		todolistBtnHide.textContent = 'Todolist'
-		settingSubtittle.textContent = 'Customize your dashboard'
+		settingSubtitle.textContent = 'Customize your dashboard'
 		show.textContent = 'Show'
 		language.textContent = 'Language'
 		tegsForApi.textContent = 'Tegs for API'
@@ -845,6 +852,10 @@ function checkLanguage() {
 		todoDone.textContent = 'Done'
 		menuMain.textContent = 'Main'
 		menuImages.textContent = 'Images'
+		linksIcon.textContent = 'Links'
+		linksAddTitle.textContent = 'New Bookmark'
+		linksAddName.placeholder = 'Enter a title'
+		linksAddUrl.placeholder = 'Insert the link'
 
 		engBtn.classList.add('active')
 		rusBtn.classList.remove('active')
@@ -996,6 +1007,7 @@ function showSettings() {
 	todoWrap.classList.remove('active')
 	settingsBtn.classList.toggle('active')
 	settingsWrap.classList.toggle('active')
+	links.classList.remove('active')
 	if (settingsBtn.classList.contains('active')) {
 		overlay.classList.add('active')
 	} else {
@@ -1003,15 +1015,14 @@ function showSettings() {
 
 	}
 }
-
-function closeAll() {
+async function closeAll() {
 	overlay.classList.remove('active')
 	settingsBtn.classList.remove('active')
 	settingsWrap.classList.remove('active')
 	todoIcon.classList.remove('active')
 	todoWrap.classList.remove('active')
+	links.classList.remove('active')
 }
-
 settingsBtn.addEventListener('click', showSettings)
 overlay.addEventListener('click', closeAll)
 
@@ -1025,6 +1036,7 @@ todoIcon.addEventListener('click', function () {
 	todoWrap.classList.toggle('active')
 	settingsBtn.classList.remove('active')
 	settingsWrap.classList.remove('active')
+	links.classList.remove('active')
 	if (todoIcon.classList.contains('active')) {
 		overlay.classList.add('active')
 	} else {
@@ -1381,8 +1393,274 @@ if (localStorage.getItem('isApiUnsplash') === 'true') {
 	isApiUnsplash = false
 }
 
+// ! Links
+const links = document.querySelector('.links')
+let isBlockedAddLink = true
+function addLink() {
+	let linksItems = links.querySelectorAll('.links_item-url')
 
 
+	const inputLinksUrl = links.querySelector('.links_item-add-url')
+	const linksItemAdding = links.querySelector('.links_item-add')
+	const inputLinksName = links.querySelector('.links_item-add-name')
+	const error = links.querySelector('.links_item-add-error')
+	const linksGrid = links.querySelector('.links_body')
+	const linksPlus = links.querySelector('.links_item-add-plus')
+	const linksWrap = links.querySelector('.links_item-add-wrap')
+	links.classList.add('zero-level')
+	function loadLinksItems() {
+
+		let itemsName = []
+		let itemsUrl = []
+		for (let i = 0; i < 50; i++) {
+
+			if (localStorage.getItem(`linkItemName${i}`)) {
+
+				itemsName.push(localStorage.getItem(`linkItemName${i}`))
+				itemsUrl.push(localStorage.getItem(`linkItemUrl${i}`))
+			}
+
+		}
+
+		for (let i = 0; i < 50; i++) {
+			localStorage.removeItem(`linkItemName${i}`)
+			localStorage.removeItem(`linkItemUrl${i}`)
+		}
+		for (let i = 0; i < itemsName.length; i++) {
+			localStorage.setItem(`linkItemName${i}`, itemsName[i])
+			localStorage.setItem(`linkItemUrl${i}`, itemsUrl[i])
+		}
+		for (let i = 0; i < 50; i++) {
+			if (localStorage.getItem(`linkItemName${i}`) && localStorage.getItem(`linkItemName${i}`) !== 'undefined') {
+				createLink(localStorage.getItem(`linkItemName${i}`), localStorage.getItem(`linkItemUrl${i}`))
+			}
+		}
+	}
+	function GetCalcLinksItems() {
+		linksItems = links.querySelectorAll('.links_item-url')
+		if (linksItems.length === 17) {
+			linksGrid.classList.add('first-level')
+			links.classList.add('first-level')
+			linksGrid.classList.remove('second-level')
+			links.classList.remove('second-level')
+			links.classList.remove('zero-level')
+		} else if (linksItems.length === 23) {
+			linksGrid.classList.add('second-level')
+			links.classList.add('second-level')
+			linksGrid.classList.remove('first-level')
+			links.classList.remove('first-level')
+			links.classList.remove('zero-level')
+		} else {
+			links.classList.add('zero-level')
+		}
+	}
+
+	GetCalcLinksItems()
+
+	function getLinks() {
+
+		const linksIcon = document.querySelector('.links_icon')
+		function showLinks() {
+			todoIcon.classList.remove('active')
+			todoWrap.classList.remove('active')
+			settingsBtn.classList.remove('active')
+			settingsWrap.classList.remove('active')
+			linksPlus.classList.remove('active')
+			linksWrap.classList.remove('active')
+			links.classList.toggle('active')
+			inputLinksName.blur()
+			inputLinksUrl.blur()
+			if (links.classList.contains('active')) {
+				overlay.classList.add('active')
+			} else {
+				overlay.classList.remove('active')
+			}
+		}
+		linksIcon.addEventListener('click', showLinks)
+	}
+	getLinks()
+
+	function validAddLink(keyPressed) {
+		linksItems = links.querySelectorAll('.links_item-url')
+		if (linksItems.length < 29 || !isBlockedAddLink) {
+
+			inputLinksUrl.classList.remove('error')
+			const keyEnter = 13;
+			if (keyPressed.which == keyEnter) {
+				if (inputLinksUrl.value.length >= 4) {
+					if (inputLinksName.value.length >= 1) {
+						inputLinksName.classList.remove('error')
+						inputLinksUrl.classList.remove('error')
+						error.textContent = ''
+						createLink(inputLinksName.value, inputLinksUrl.value)
+					} else {
+						inputLinksName.classList.add('error')
+						if (isRussian) {
+							error.textContent = 'Пожалуйста введите название'
+						} else {
+							error.textContent = 'Please enter a title'
+						}
+					}
+
+
+				} else {
+					inputLinksUrl.classList.add('error')
+					if (isRussian) {
+						error.textContent = 'Пожалуйста вставьте корректный URL'
+					} else {
+						error.textContent = 'Please enter correct URL'
+					}
+				}
+			}
+		} else {
+			inputLinksUrl.classList.add('hide')
+			inputLinksName.classList.add('hide')
+			if (isRussian) {
+				error.textContent = 'Пожалуйста удалите закладку, прежде чем добавлять новую'
+			} else {
+				error.textContent = 'Please remove bookmark before adding a new one'
+			}
+		}
+	}
+
+	loadLinksItems()
+	function createLink(name, url) {
+		const linksTrashClone = document.createElement('div')
+		linksTrashClone.classList.add('links-trash')
+
+		const linkCreate = document.createElement('a')
+		linkCreate.classList.add('links_item-url')
+		linkCreate.href = url
+
+		const itemCreate = document.createElement('div')
+		itemCreate.classList.add('links_item')
+
+		const itemImgCreate = document.createElement('div')
+		itemImgCreate.classList.add('links_item-img')
+		itemImgCreate.style.background = `url("https://www.google.com/s2/favicons?domain=${url}") center no-repeat`
+
+
+		const itemTittleCreate = document.createElement('h3')
+		itemTittleCreate.classList.add('links_item-title')
+		itemTittleCreate.textContent = name
+
+		const itemLinkCreate = document.createElement('div')
+		itemLinkCreate.classList.add('links_item-link')
+		itemLinkCreate.textContent = url
+
+		itemCreate.append(itemImgCreate)
+		itemCreate.append(itemTittleCreate)
+		itemCreate.append(itemLinkCreate)
+
+		linkCreate.append(itemCreate)
+		const itemEmpty = document.createElement('div')
+		itemEmpty.classList.add('empty-item')
+		itemEmpty.append(linkCreate)
+		itemEmpty.append(linksTrashClone)
+		linksItemAdding.before(itemEmpty)
+
+		saveLinksElements()
+
+		inputLinksUrl.value = ''
+		inputLinksName.value = ''
+		linksPlus.classList.remove('active')
+		linksWrap.classList.remove('active')
+		inputLinksName.blur()
+		inputLinksUrl.blur()
+		const linksTrash = links.querySelectorAll('.links-trash')
+		linksTrash.forEach(trash => (trash.onclick = function () {
+			deleteLinkItem(this.parentNode)
+		}))
+
+		GetCalcLinksItems()
+
+	}
+	function deleteLinkItem(target) {
+		const linksItems = links.querySelectorAll('.empty-item')
+		for (let i = 0; i < linksItems.length; i++) {
+			linksItems[i].remove()
+			if (target === linksItems[i]) {
+
+
+				localStorage.removeItem(`linkItemName${i}`)
+				localStorage.removeItem(`linkItemUrl${i}`)
+				inputLinksUrl.classList.remove('hide')
+				inputLinksName.classList.remove('hide')
+				error.textContent = ''
+
+			}
+		}
+
+		loadLinksItems()
+
+	}
+
+	function GetCalcLinksItems() {
+		linksItems = links.querySelectorAll('.links_item-url')
+		if (linksItems.length === 17) {
+			linksGrid.classList.add('first-level')
+			links.classList.add('first-level')
+			linksGrid.classList.remove('second-level')
+			links.classList.remove('second-level')
+
+		} else if (linksItems.length === 23) {
+			linksGrid.classList.add('second-level')
+			links.classList.add('second-level')
+			linksGrid.classList.remove('first-level')
+			links.classList.remove('first-level')
+		}
+	}
+	function saveLinksElements() {
+		const itemsTittle = links.querySelectorAll('.links_item-title')
+		const itemsLink = links.querySelectorAll('.links_item-link')
+		const linksItems = links.querySelectorAll('.empty-item')
+		for (let i = 0; i < linksItems.length; i++) {
+			localStorage.setItem(`linkItemName${i}`, itemsTittle[i].textContent)
+			localStorage.setItem(`linkItemUrl${i}`, itemsLink[i].textContent)
+
+		}
+	}
+
+
+	inputLinksUrl.addEventListener("keypress", (keyPressed) => {
+		const keyPress = keyPressed;
+		validAddLink(keyPress)
+	})
+	inputLinksName.addEventListener("keypress", (keyPressed) => {
+		const keyPress = keyPressed;
+		validAddLink(keyPress)
+	})
+
+
+
+
+
+	function showLink() {
+
+		function showAddLink() {
+			linksPlus.classList.add('active')
+			linksWrap.classList.add('active')
+			inputLinksName.focus()
+		}
+
+		function hideAddLink() {
+			linksPlus.classList.remove('active')
+			linksWrap.classList.remove('active')
+			inputLinksName.blur()
+			inputLinksUrl.blur()
+		}
+
+
+		linksPlus.addEventListener('click', showAddLink)
+		overlay.addEventListener('click', hideAddLink)
+	}
+	showLink()
+
+
+
+}
+
+addLink()
 
 console.group('%cCross-check: Momentum, ConstantineTU', 'color: red')
 console.log('%cНе выполненные пункты: если источником получения фото указан API, в настройках приложения можно указать тег/теги, для которых API будет присылает фото 0 из 3', 'color: red')

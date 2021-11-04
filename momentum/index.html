@@ -6,7 +6,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="stylesheet" href="css/style.min.css" />
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;700&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;700&family=Oswald:wght@200;300;700&display=swap"
+		rel="stylesheet">
+
 </head>
 
 <body>
@@ -44,9 +49,40 @@
 		<ul class="play-list"></ul>
 	</div>
 	<div class="links">
-		<div class="links_icon">Links</div>
 		<div class="links_wrap">
-			<div class="links_container"></div>
+			<div class="links_container">
+				<div class="links_body">
+
+					<a class="links_item-url-blocked" href="https://www.google.ru/" target="_blank">
+						<div class="links_item-blocked">
+							<div class="links_item-img-blocked"></div>
+							<h3 class="links_item-title-blocked">Google</h3>
+							<div class="links_item-link-blocked">https://www.google.ru/</div>
+						</div>
+					</a>
+					<div class="links_item-add">
+						<div class="links_item-add-plus"></div>
+						<!-- <div class="links_item-add-close"></div> -->
+						<div class="links_item-add-wrap">
+							<h2 class="links_item-add-title">New Bookmark</h2>
+							<div class="links_item-add-container">
+								<div class="links_item-add-error"></div>
+								<div class="links_item-add-name_wrap">
+									<input type="text" class="links_item-add-name links_item-add-input"
+										placeholder="Enter a title" maxlength="50">
+								</div>
+								<div class="links_item-add-url_wrap">
+									<input type="text" class="links_item-add-url links_item-add-input"
+										placeholder="Insert the link ">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="links_icon">Links</div>
+
 		</div>
 	</div>
 	<div class="weather">
@@ -112,13 +148,13 @@
 				<div id="mainMenu" class="settings-column">
 					<div class="settings-column">
 						<div class="footer-lang">
-							<h2 id="language" class="settings-tittle">Language</h2>
+							<h2 id="language" class="settings-title">Language</h2>
 							<div class=""><span class="eng active">Eng</span>/<span class="rus">Rus</span>
 							</div>
 						</div>
 					</div>
-					<h3 class="settings-subtittle">Customize your dashboard</h3>
-					<h2 id="show" class="settings-tittle main-tittle">Show</h2>
+					<h3 class="settings-subtitle">Customize your dashboard</h3>
+					<h2 id="show" class="settings-title main-title">Show</h2>
 					<div class="settings-block time-block active">Time</div>
 					<div class="settings-block date-block active">Date</div>
 					<div class="settings-block greeting-block active">Greeting</div>
@@ -131,14 +167,14 @@
 				<div id="langMenu" class="settings-column">
 
 					<div class="footer-settings">
-						<h2 id="imagesSource" class="settings-tittle">Images source</h2>
+						<h2 id="imagesSource" class="settings-title">Images source</h2>
 						<div class="github -api active">GitHub</div>
 						<div class="unsplash -api">Unsplash</div>
 						<div class="flickr -api">Flickr</div>
 						<div class="own -api">Own</div>
 					</div>
 					<div class="settings-column">
-						<h2 id="tegsForApi" class="settings-tittle">Tegs for API</h2>
+						<h2 id="tegsForApi" class="settings-title">Tegs for API</h2>
 					</div>
 				</div>
 
@@ -185,7 +221,7 @@
 	<div class="todo-wrap">
 		<div class="todo-container">
 			<div class="todo-controlls">
-				<h2 class="todo-tittle">Todolist</h2>
+				<h2 class="todo-title">Todolist</h2>
 				<div id="todoDeleteBtn" class="todo-delete first">Clear</div>
 				<div id="todoDeleteWrap" class="todo-delete-wrap">
 					<div id="todoDeleteAll" class="todo-delete">All </div>
