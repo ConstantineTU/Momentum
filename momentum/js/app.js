@@ -816,6 +816,7 @@ function checkLanguage() {
 		menuMain.textContent = 'Главное'
 		menuImages.textContent = 'Изображения'
 		linksIcon.textContent = 'Закладки'
+		linksIcon.classList.add('russian')
 		linksAddTitle.textContent = 'Новая закладка'
 		linksAddName.placeholder = 'Введите название'
 		linksAddUrl.placeholder = 'Вставьте ссылку'
@@ -853,6 +854,7 @@ function checkLanguage() {
 		menuMain.textContent = 'Main'
 		menuImages.textContent = 'Images'
 		linksIcon.textContent = 'Links'
+		linksIcon.classList.remove('russian')
 		linksAddTitle.textContent = 'New Bookmark'
 		linksAddName.placeholder = 'Enter a title'
 		linksAddUrl.placeholder = 'Insert the link'

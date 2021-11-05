@@ -948,6 +948,11 @@ body._lock {
   opacity: 0.7;
 }
 
+.links_icon.russian {
+  font-size: 20px;
+  left: calc(50% - 49px);
+}
+
 .links_icon:hover {
   opacity: 1;
 }
@@ -2496,12 +2501,14 @@ body._lock {
   visibility: hidden;
   z-index: 5;
   padding: 20px;
+  pointer-events: none;
 }
 
 .settings-wrap.active {
   bottom: 60px;
   visibility: visible;
   opacity: 1;
+  pointer-events: visible;
 }
 
 .settings-menu-radio {
@@ -2894,17 +2901,20 @@ body._lock {
   opacity: 0;
   z-index: 5;
   padding: 80px 20px 20px 20px;
+  pointer-events: none;
 }
 
 .todo-wrap.active {
   bottom: 60px;
   visibility: visible;
   opacity: 1;
+  pointer-events: visible;
 }
 
 .todo-wrap.hide {
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
 }
 
 .todo-container {
@@ -3785,8 +3795,19 @@ body._lock {
   }
 
   .links_icon {
-    bottom: -42px;
     padding-top: 10px;
+    border-radius: 0 0 10px 10px;
+    opacity: 0.95;
+    left: calc(50% - 24px);
+    bottom: -27px;
+    padding: 5px;
+    font-size: 17px;
+  }
+
+  .links_icon.russian {
+    bottom: -24px;
+    font-size: 14px;
+    left: calc(50% - 32px);
   }
 
   .links_item-add-input {
@@ -3969,11 +3990,6 @@ body._lock {
 }
 
 @media (max-width: 418.98px) {
-  .links_icon {
-    bottom: -40px;
-    font-size: 20px;
-  }
-
   .player {
     width: 122px;
   }
@@ -4032,14 +4048,6 @@ body._lock {
 
   .page {
     height: 30vh;
-  }
-
-  .links_icon {
-    opacity: 0.95;
-    left: calc(50% - 24px);
-    bottom: -27px;
-    padding: 5px;
-    font-size: 17px;
   }
 
   .links_item-add-input {
