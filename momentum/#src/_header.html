@@ -1,0 +1,96 @@
+<header class="header">
+	<div class="player">
+		<div class="player-wrap">
+			<div class="player-controls">
+				<button class="play-prev player-icon"></button>
+				<button class="play player-icon"></button>
+				<button class="play-next player-icon"></button>
+			</div>
+			<div class="volume-player">
+				<div id="muteButton" class="muteButton">
+					<button class="play-volume player-icon"></button>
+				</div>
+				<input class="soundVolume" id="soundVolume" type="range" min="0" max="1" step="0.01">
+			</div>
+		</div>
+		<div class="track-name"></div>
+		<div class="duration-player">
+			<input class="soundProgress" id="soundProgress" type="range" min="0" max="1" step="0.01">
+
+		</div>
+		<div class="play-list-wrap">
+			<button class="play-list-button"></button>
+			<div class="duration-timer">
+				<div id="timer" class="timer-header"></div>
+				/
+				<div id="duration"></div>
+			</div>
+		</div>
+		<ul class="play-list"></ul>
+	</div>
+	<div class="links">
+		<div class="links_wrap">
+			<div class="links_container">
+				<div class="links_body">
+
+					<a class="links_item-url-blocked" href="https://www.google.ru/" target="_blank">
+						<div class="links_item-blocked">
+							<div class="links_item-img-blocked"></div>
+							<h3 class="links_item-title-blocked">Google</h3>
+							<div class="links_item-link-blocked">https://www.google.ru/</div>
+						</div>
+					</a>
+					<div class="links_item-add">
+						<div class="links_item-add-plus"></div>
+						<!-- <div class="links_item-add-close"></div> -->
+						<div class="links_item-add-wrap">
+							<h2 class="links_item-add-title">New Bookmark</h2>
+							<div class="links_item-add-container">
+								<div class="links_item-add-error"></div>
+								<div class="links_item-add-name_wrap">
+									<input type="text" class="links_item-add-name links_item-add-input"
+										placeholder="Enter a title" maxlength="50">
+								</div>
+								<div class="links_item-add-url_wrap">
+									<input type="text" class="links_item-add-url links_item-add-input"
+										placeholder="Insert the link ">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="links_icon">Links</div>
+
+		</div>
+	</div>
+	<div class="weather">
+		<input type="text" class="city" placeholder="[Enter sity]" />
+		<div class="temperature-wrap">
+			<div class="city-wrap">
+				<i class="weather-icon owf"></i>
+				<div class="weather-description"></div>
+			</div>
+			<div class="weather-wrap">
+				<div class="description-container">
+
+					<span class="temperature"></span>
+
+
+				</div>
+			</div>
+		</div>
+		<div class="weather-error"></div>
+
+
+		<div class="weather-wrap">
+			<div class="wind"></div>
+		</div>
+		<div class="weather-wrap">
+			<div class="humidity"></div>
+		</div>
+
+
+	</div>
+</header>

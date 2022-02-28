@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html class="_webp" lang="ru">
+@@include('_head.html',{
+"title":"Momentum"
+})
+
+<body>
+
+	<div class="wrapper">
+		<div class="overlay"></div>
+		@@include('_header.html',{})
+		<div class="page">
+			<main class="main">
+				<div class="slider-icons">
+					<button class="slide-prev slider-icon"></button>
+					<button class="slide-next slider-icon"></button>
+				</div>
+				<time class="time"></time>
+				<date class="date"></date>
+				<div class="greeting-container">
+					<div class="greeting-col"></div>
+					<span class="greeting"></span>
+					<input type="text" class="name" placeholder="[Enter name]" />
+					<div class="greeting-col"></div>
+				</div>
+			</main>
+
+		</div>
+		@@include('_footer.html',{})
+	</div>
+	<script type="module" src="js/app.min.js"></script>
+</body>
+
+</html>
