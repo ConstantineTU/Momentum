@@ -2,6 +2,7 @@
 ## (Desktop and mobile (320px) versions)
 
 ### This project is a copy of the Google Chrome extension Momentum. In this project, I first encountered asynchronous API requests, working with dates, audio API.
+#### The application has Russian and English languages(RU/ENG)
 
 ***Used technologies:***
 - HTML5
