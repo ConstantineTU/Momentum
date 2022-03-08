@@ -1,5 +1,5 @@
-# Project link [Momentum](https://rolling-scopes-school.github.io/constantinetu-JSFE2021Q3/momentum/) 
-## (Desktop and mobile (320px) versions)
+# Project link [Momentum](https://constantinetu.github.io/Momentum/) 
+## (Desktop and mobile versions)
 
 ### This project is a copy of the Google Chrome extension Momentum. In this project, I first encountered asynchronous API requests, working with dates, audio API.
 #### The application has Russian and English languages(RU/ENG)
