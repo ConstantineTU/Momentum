@@ -1,5 +1,0 @@
-
-@@include('files/script.js', {})
-
-
-
