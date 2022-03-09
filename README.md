@@ -1,4 +1,4 @@
-# Project link [Momentum](https://constantinetu.github.io/Momentum/) 
+# Project link [Momentum](https://constantinetu-momentum.netlify.app/) 
 ## (Desktop and mobile versions)
 
 ### This project is a copy of the Google Chrome extension Momentum. In this project, I first encountered asynchronous API requests, working with dates, audio API.
