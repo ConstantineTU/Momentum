@@ -10,7 +10,6 @@ let isWebp = false;
 async function testWebP(adap) {
   let webP = await new Image();
   webP.onload = webP.onerror = async function () {
-    console.log("webP.height == 2", webP.height == 2);
     isWebp = webP.height == 2;
     setBgFirstLoad(isWebp, adap);
   };
@@ -26,7 +25,6 @@ if (mediaQuery.matches) {
   adaptive = true;
   await testWebP(adaptive);
 }
-console.log("adaptive", adaptive, isWebp);
 if (
   localStorage.getItem("isRussian") &&
   localStorage.getItem("isRussian") !== "undefined"
@@ -188,7 +186,8 @@ eventListenersSettingsBlocks();
 function showTime() {
   const time = document.querySelector(".time");
   const dateLocal = new Date();
-  const currentTime = dateLocal.toLocaleTimeString();
+  const options = { hour: "numeric", minute: "numeric", hour12: false };
+  const currentTime = dateLocal.toLocaleTimeString(undefined, options);
   time.textContent = currentTime;
   showDate();
   showGreeting();
@@ -1652,30 +1651,3 @@ function addLink() {
 }
 
 addLink();
-
-console.group("%cCross-check: Momentum, ConstantineTU", "color: red");
-console.log(
-  "%cНе выполненные пункты: если источником получения фото указан API, в настройках приложения можно указать тег/теги, для которых API будет присылает фото 0 из 3",
-  "color: red"
-);
-console.log(
-  `Score 150 / 150
-
-	Выполненные пункты: Все пункты, которые не указаны - выполены
-	Своя собственная фича - todolist справа снизу, он сохраняется при перезагрузке, выполненные задачи удаляются после перезагрузке или при нажатии на кнопку корзина
-	 помимо этого плеер сохраняет время и песню при перезагрузке.
-	 `
-);
-console.log(
-  "%cЕсли Unsplash API  выдаёт ошибку 403, то прошу вас перепроверить работу через 1 час, так как лимит на изображения закончился",
-  "color: blue"
-);
-console.log("	%cИтого 157 баллов из 160", "color: green");
-
-console.log(
-  "%cМой дискорд - https://discordapp.com/users/414360051101466624 , если вам понравилась моя работа, пожалуйста добавьте её в лучшие https://forms.gle/Xc9RVjEWTTGF6ubK8",
-  "color: blue"
-);
-console.log("%cСпасибо за проверку и успехов в учёбе!", "color: green");
-
-console.groupEnd();
