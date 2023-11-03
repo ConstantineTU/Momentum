@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html class="_webp" lang="ru">
-<head>
+  <head>
 	<title>Momentum</title>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,11 +14,11 @@
 
 </head>
 
-<body>
-
-	<div class="wrapper">
-		<div class="overlay"></div>
-		<header class="header">
+  <body>
+    <div class="wrapper">
+      <div class="overlay"></div>
+      <div class="overlay-background"></div>
+      <header class="header">
 	<div class="player">
 		<div class="player-wrap">
 			<div class="player-controls">
@@ -114,24 +114,23 @@
 
 	</div>
 </header>
-		<div class="page">
-			<main class="main">
-				<div class="slider-icons">
-					<button class="slide-prev slider-icon"></button>
-					<button class="slide-next slider-icon"></button>
-				</div>
-				<time class="time"></time>
-				<date class="date"></date>
-				<div class="greeting-container">
-					<div class="greeting-col"></div>
-					<span class="greeting"></span>
-					<input type="text" class="name" placeholder="[Enter name]" />
-					<div class="greeting-col"></div>
-				</div>
-			</main>
-
-		</div>
-		<footer class="footer">
+      <div class="page">
+        <main class="main">
+          <div class="slider-icons">
+            <button class="slide-prev slider-icon"></button>
+            <button class="slide-next slider-icon"></button>
+          </div>
+          <time class="time"></time>
+          <date class="date"></date>
+          <div class="greeting-container">
+            <div class="greeting-col"></div>
+            <span class="greeting"></span>
+            <input type="text" class="name" placeholder="[Enter name]" />
+            <div class="greeting-col"></div>
+          </div>
+        </main>
+      </div>
+      <footer class="footer">
 
 	<div class="settings-wrap">
 		<input class="settings-menu-radio" type="radio" name="settingsMenu" id="menu-1" checked>
@@ -258,8 +257,7 @@
 		</div>
 	</div>
 </footer>
-	</div>
-	<script type="module" src="js/app.min.js"></script>
-</body>
-
+    </div>
+    <script type="module" src="js/app.min.js"></script>
+  </body>
 </html>

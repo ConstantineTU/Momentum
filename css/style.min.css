@@ -42,7 +42,7 @@ body {
 
 body {
   line-height: 1;
-  font-family: "Nanito", "Oswald" sans-serif;
+  font-family: "Nanito", "Oswald", sans-serif;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -51,7 +51,7 @@ body {
 input,
 button,
 textarea {
-  font-family: "Nanito", "Oswald" sans-serif;
+  font-family: "Nanito", "Oswald", sans-serif;
 }
 
 input::-ms-clear {
@@ -99,7 +99,7 @@ html {
 }
 
 body {
-  font-family: "Nanito", "Oswald" sans-serif;
+  font-family: "Nanito", "Oswald", sans-serif;
   min-width: 320px;
   font-size: 16px;
   color: #fff;
@@ -107,7 +107,6 @@ body {
   background: url("") center/cover, rgba(0, 0, 0, 0.5) no-repeat;
   background-blend-mode: multiply;
   transition: background-image 1s ease-in-out;
-  text-shadow: 1px 1px 1px #000;
 }
 body._lock {
   overflow: hidden;
@@ -2131,7 +2130,6 @@ body._lock {
 
 .greeting {
   flex: 1;
-  padding: 10px;
   text-align: right;
   white-space: pre;
 }
@@ -2149,6 +2147,7 @@ body._lock {
   appearance: none;
   text-align: left;
   color: #fff;
+  font-family: "Nanito", "Oswald", sans-serif;
   background-color: transparent;
   border: 0;
   outline: 0;
@@ -3120,6 +3119,19 @@ body._lock {
     width: 30px;
     background-size: 30px 30px;
   }
+}
+
+.overlay-background {
+  z-index: -1;
+  background-image: url("../assets/img/dark.png");
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+  background-size: 100% 100%;
+  transition: opacity 0.3s ease-out;
 }
 
 .overlay {
